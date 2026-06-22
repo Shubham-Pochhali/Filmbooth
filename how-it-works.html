@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FILMBOOTH - How It Works</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #111827;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+    </style>
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        window.addEventListener("pageshow", () => {
+            document.body.classList.add("page-loaded");
+        });
+
+        document.addEventListener("click", (e) => {
+            const link = e.target.closest("a");
+            if (!link || !link.href) return;
+            
+            try {
+                const url = new URL(link.href, window.location.href);
+                const isLocal = url.protocol === 'file:' || url.origin === window.location.origin;
+                const isSamePage = url.pathname === window.location.pathname;
+                const hasHash = url.hash.length > 0;
+
+                if (isLocal && (!isSamePage || (!hasHash && url.href !== window.location.href))) {
+                    e.preventDefault();
+                    document.body.classList.remove("page-loaded");
+                    setTimeout(() => {
+                        window.location.href = link.href;
+                    }, 400);
+                }
+            } catch (err) {}
+        });
+    </script>
+</head>
+<body class="min-h-screen flex flex-col font-sans relative text-gray-900 bg-[#fafafa]">
+    <div class="w-full max-w-[1200px] mx-auto px-6 pt-10 pb-16">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-24">
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <a href="index.html" class="font-bold tracking-[0.2em] text-lg hover:text-gray-700 transition-colors">FILMBOOTH</a>
+            </div>
+            <nav class="hidden md:flex gap-10 text-[10px] font-bold tracking-widest text-gray-500 uppercase">
+                <a href="index.html" class="hover:text-red-500 transition-colors">Home</a>
+                <a href="how-it-works.html" class="text-black border-b-[1.5px] border-black pb-1">How it works</a>
+                <a href="index.html#scrapbook" class="hover:text-red-500 transition-colors">Scrapbook</a>
+            </nav>
+        </header>
+
+        <!-- Hero -->
+        <section class="max-w-2xl mb-24">
+            <div class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase mb-4">METHODOLOGY</div>
+            <h1 class="text-5xl md:text-[68px] font-serif font-bold mb-6 tracking-tight">The Art of the Instant.</h1>
+            <p class="text-gray-500 text-[13px] leading-relaxed max-w-[420px]">
+                A digital darkroom designed for permanence. We've stripped away the noise to leave you with the essence of the moment.
+            </p>
+        </section>
+    </div>
+
+    <!-- Marquee -->
+    <div class="w-full border-y border-gray-200/60 py-3.5 mb-32 bg-[#f7f7f7]/80 backdrop-blur-sm overflow-hidden flex whitespace-nowrap">
+        <div class="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 flex items-center justify-between w-full max-w-[1400px] mx-auto px-4">
+            <span>ARCHIVAL QUALITY</span> <span class="mx-6 text-[8px]">⚬</span>
+            <span>GRAIN SYNTHESIS</span> <span class="mx-6 text-[8px]">⚬</span>
+            <span>PHYSICAL STRIPS</span> <span class="mx-6 text-[8px]">⚬</span>
+            <span>DARKROOM TECH</span> <span class="mx-6 text-[8px]">⚬</span>
+            <span>ARCHIVAL QUALITY</span> <span class="mx-6 text-[8px]">⚬</span>
+            <span>GRAIN SYNTHESIS</span> <span class="mx-6 text-[8px]">⚬</span>
+            <span>PHYSICAL STRIPS</span>
+        </div>
+    </div>
+
+    <div class="w-full max-w-[1000px] mx-auto px-6 space-y-40 mb-40">
+        
+        <!-- Step 1 -->
+        <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-center">
+            <div class="relative order-2 md:order-1">
+                <div class="absolute -top-[100px] -left-12 text-[180px] font-serif italic text-gray-200/50 select-none pointer-events-none font-bold leading-none tracking-tighter">01</div>
+                <div class="relative z-10 md:pl-4">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-5 text-gray-900">Strike a pose.</h2>
+                    <p class="text-gray-500 text-[13px] leading-relaxed max-w-[320px] mb-8">
+                        Enter our digital studio. Align yourself with the frame. No filters, no edits—just the raw geometry of the moment captured in high-fidelity monochrome.
+                    </p>
+                    <div class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400 flex items-center gap-2">
+                        <span class="w-2 h-2 border-[1.5px] border-gray-400"></span> LIVE VIEW ACTIVE
+                    </div>
+                </div>
+            </div>
+            <div class="relative justify-self-center lg:justify-self-end order-1 md:order-2">
+                <div class="bg-white p-2 pb-8 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transform rotate-1 border border-gray-100 max-w-[380px]">
+                    <img src="assets/step1.png" alt="Studio Portrait" class="w-full aspect-[4/5] object-cover grayscale contrast-125 brightness-90 border border-gray-200">
+                    <div class="text-center mt-4">
+                        <span class="font-serif italic text-[15px] text-gray-600">Studio Session A-01</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-center">
+            <div class="relative justify-self-center lg:justify-self-start order-1 md:order-1">
+                
+                <div class="bg-white p-2 pb-8 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] transform -rotate-[2deg] border border-gray-100 max-w-[380px]">
+                    <img src="assets/step2.png" alt="Textures Matrix" class="w-full aspect-square object-cover grayscale contrast-125 border border-gray-200">
+                    <div class="text-center mt-4">
+                        <span class="font-serif italic text-[15px] text-gray-600">Vibe Selection Matrix</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative order-2 md:order-2 md:pl-12">
+                <div class="absolute -top-[100px] -left-12 text-[180px] font-serif italic text-gray-200/50 select-none pointer-events-none font-bold leading-none tracking-tighter">02</div>
+                <div class="relative z-10 md:pl-4">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-5 text-gray-900">Pick a vibe.</h2>
+                </div>
+                
+                <p class="text-gray-500 text-[13px] leading-relaxed max-w-[320px] mb-8">
+                    Choose from curated processing styles. From the deep blacks of 'Noir' to the silver-leaf highlights of 'Eclipse,' each preset is calibrated to mimic actual chemical reactions on paper.
+                </p>
+                <div class="text-[9px] font-bold tracking-[0.25em] uppercase text-gray-400 font-mono">
+                    PRM-400 ISO / ILF-X
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-center">
+            <div class="relative order-2 md:order-1">
+                <div class="absolute -top-[100px] -left-12 text-[180px] font-serif italic text-gray-200/50 select-none pointer-events-none font-bold leading-none tracking-tighter">03</div>
+                <div class="relative z-10 md:pl-4">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-5 text-gray-900">Keep forever.</h2>
+                    <p class="text-gray-500 text-[13px] leading-relaxed max-w-[340px] mb-10">
+                    Export your digital strip or have it physically printed on archival 300gsm paper. A tangible record in a world of disappearing pixels.
+                </p>
+                </div>
+                
+                
+                <ul class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-500 space-y-4 font-mono">
+                    <li class="flex items-center gap-3">
+                        <svg class="w-3.5 h-3.5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> 
+                        HIGH-RES TIF EXPORT
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="w-3.5 h-3.5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> 
+                        FIBER-BASED PRINT OPTION
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="w-3.5 h-3.5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> 
+                        ENCRYPTED CLOUD ARCHIVE
+                    </li>
+                </ul>
+            </div>
+            <div class="relative justify-self-center lg:justify-self-end order-1 md:order-2">
+                <div class="bg-white p-2 pb-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.2)] transform rotate-[3deg] border border-gray-100 max-w-[260px]">
+                    <img src="assets/step3.png" alt="Photo Strip" class="w-full object-cover grayscale contrast-125 border border-gray-200" style="aspect-ratio: 1/3;">
+                    <div class="text-center mt-4">
+                        <span class="font-serif italic text-[15px] text-gray-600">The Final Strip</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="w-full bg-[#181818] text-white py-28 flex flex-col items-center shadow-inner mt-auto">
+        <h2 class="text-3xl md:text-[38px] font-serif font-bold mb-6">Ready to start your strip?</h2>
+        <p class="text-gray-400 text-[11px] mb-12 tracking-wide font-mono text-center max-w-[340px] leading-relaxed">
+            Join 12,000+ creators preserving their digital moments in archival silver.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+            <a href="booth.html" class="bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] px-10 py-3.5 hover:bg-gray-200 transition-colors">
+                OPEN STUDIO
+            </a>
+            <a href="#" class="text-[10px] font-bold uppercase tracking-[0.2em] px-10 py-3.5 border border-gray-600 hover:border-white transition-colors">
+                VIEW GALLERY
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full bg-[#f2f2f2] py-14 border-t border-gray-200">
+        <div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div class="font-serif font-bold text-[18px] tracking-[0.15em] text-gray-900">SILVER HALIDE</div>
+            <nav class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-[9px] uppercase font-bold tracking-[0.25em] text-gray-500">
+                <a href="#" class="hover:text-black transition-colors">PRIVACY</a>
+                <a href="#" class="hover:text-black transition-colors">TERMS</a>
+                <a href="#" class="hover:text-black transition-colors">INSTAGRAM</a>
+                <a href="#" class="hover:text-black transition-colors">ARCHIVE</a>
+            </nav>
+            <div class="text-[9px] uppercase font-bold tracking-[0.15em] text-gray-400 font-mono text-center md:text-right">
+                © 2024 SILVER HALIDE ARCHIVE. ALL RIGHTS RESERVED.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

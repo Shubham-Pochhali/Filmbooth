@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FILMBOOTH - Studio</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            opacity: 0;
+            transition: opacity 0.4s ease-out, background-color 0.8s ease, color 0.8s ease;
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        .font-serif-italic {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+        #camera-feed {
+            filter: grayscale(100%) contrast(120%);
+            transform: scaleX(-1);
+        }
+        .flash-active {
+            animation: flashAnimation 0.8s ease-out;
+        }
+        @keyframes flashAnimation {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        #final-print-image {
+            transform: translateY(-100%);
+        }
+        .printing-animation {
+            animation: printDown 6s ease-out forwards;
+        }
+        @keyframes printDown {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* Printer Slot Effect */
+        .printer-slot {
+            position: relative;
+            box-shadow: inset 0 20px 20px -20px rgba(0,0,0,0.5);
+            border-top: 4px solid #ddd;
+        }
+    </style>
+    <script>
+        window.addEventListener("pageshow", () => {
+            document.body.classList.add("page-loaded");
+        });
+
+        document.addEventListener("click", (e) => {
+            const link = e.target.closest("a");
+            if (!link || !link.href) return;
+            
+            try {
+                const url = new URL(link.href, window.location.href);
+                const isLocal = url.protocol === 'file:' || url.origin === window.location.origin;
+                const isSamePage = url.pathname === window.location.pathname;
+                const hasHash = url.hash.length > 0;
+
+                if (isLocal && (!isSamePage || (!hasHash && url.href !== window.location.href))) {
+                    e.preventDefault();
+                    document.body.classList.remove("page-loaded");
+                    setTimeout(() => {
+                        window.location.href = link.href;
+                    }, 400);
+                }
+            } catch (err) {}
+        });
+    </script>
+</head>
+<body class="min-h-screen flex flex-col items-center bg-[#fafafa] text-gray-900">
+  <div class="w-full max-w-6xl px-6 py-10 mx-auto flex flex-col flex-grow">
+      
+      <!-- Header -->
+      <header class="flex justify-between items-center mb-16 flex-shrink-0">
+          <div class="flex items-center gap-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <a href="index.html" class="font-bold tracking-[0.2em] text-lg hover:text-red-600 transition-colors">FILMBOOTH</a>
+          </div>
+          <nav class="hidden md:flex gap-10 text-[10px] font-bold tracking-widest text-zinc-500 uppercase">
+              <a href="index.html" class="hover:text-red-600 transition-colors">Home</a>
+              <a href="how-it-works.html" class="hover:text-red-600 transition-colors">How it works</a>
+              <a href="index.html#scrapbook" class="hover:text-red-600 transition-colors">Scrapbook</a>
+          </nav>
+      </header>
+
+      <!-- View 0: Setup -->
+      <main id="view-setup" class="flex flex-col items-center flex-grow mb-16 w-full max-w-4xl mx-auto mt-10">
+          <div class="text-center mb-16">
+              <h1 class="text-5xl font-bold font-serif mb-4">Select Film Stock</h1>
+              <p class="text-gray-500 text-[10px] font-mono tracking-widest uppercase">Select your archival process</p>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-10 w-full">
+              <!-- B&W Stock -->
+              <button id="stock-bw" class="group text-left border border-gray-200 bg-white p-10 hover:border-black transition-colors flex flex-col items-start shadow-sm relative">
+                  <div class="absolute -top-3 right-8 w-16 h-6 bg-gray-100/80 backdrop-blur-sm transform rotate-3"></div>
+                  <h3 class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-6">ISO 400</h3>
+                  <h2 class="text-3xl font-serif font-bold mb-4">Silver Halide</h2>
+                  <p class="font-serif-italic text-gray-600 text-sm leading-relaxed mb-10">
+                      "Classic black and white simulation. High contrast, pronounced grain, and deep shadows."
+                  </p>
+                  <div class="mt-auto w-full flex justify-between items-end border-t border-gray-100 pt-6">
+                      <span class="text-[9px] font-mono text-gray-400 tracking-widest uppercase">FORMAT: MONOCHROME</span>
+                      <span class="text-xl group-hover:translate-x-2 transition-transform">→</span>
+                  </div>
+              </button>
+              
+              <!-- Color Stock -->
+              <button id="stock-color" class="group text-left border border-gray-200 bg-white p-10 hover:border-black transition-colors flex flex-col items-start shadow-sm relative">
+                  <div class="absolute -top-3 right-8 w-16 h-6 bg-gray-100/80 backdrop-blur-sm transform -rotate-2"></div>
+                  <h3 class="text-[9px] font-bold tracking-[0.2em] uppercase text-[#c83232] mb-6">ISO 400</h3>
+                  <h2 class="text-3xl font-serif font-bold mb-4">Portra Warm</h2>
+                  <p class="font-serif-italic text-gray-600 text-sm leading-relaxed mb-10">
+                      "Vintage color negative simulation. Warm skin tones, subtle sepia tint, and soft contrast."
+                  </p>
+                  <div class="mt-auto w-full flex justify-between items-end border-t border-gray-100 pt-6">
+                      <span class="text-[9px] font-mono text-[#c83232]/70 tracking-widest uppercase">FORMAT: COLOR NEGATIVE</span>
+                      <span class="text-xl group-hover:translate-x-2 transition-transform text-[#c83232]">→</span>
+                  </div>
+              </button>
+          </div>
+      </main>
+
+      <!-- View 1: Studio -->
+      <main id="view-studio" class="hidden flex-col items-center flex-grow mb-16 w-full max-w-2xl mx-auto">
+          <!-- Header Layout -->
+          <div class="w-full flex flex-col items-start mb-8">
+              <h1 class="text-[44px] font-bold font-serif mb-2 leading-none">The Studio</h1>
+              <div class="flex items-center gap-4 text-[10px] font-mono tracking-widest uppercase">
+                  <span class="text-zinc-400">GET READY FOR 4 SNAPS</span>
+                  <div class="h-px w-16 bg-zinc-800"></div>
+                  <span class="text-red-600">ISO 400</span>
+              </div>
+          </div>
+
+          <!-- Top Status Bar -->
+          <div class="w-full flex items-center gap-4 bg-[#1a1a1a] border border-zinc-800 px-4 py-3 text-[10px] font-mono tracking-widest uppercase text-zinc-400 mb-4 rounded-sm shadow-inner">
+              <div class="flex items-center gap-2">
+                  <span id="live-indicator" class="w-2 h-2 rounded-full bg-[#c83232]"></span>
+                  <span id="status-text">OPTICAL VIEWFINDER</span>
+              </div>
+              <div class="h-3 w-px bg-zinc-800"></div>
+              <span id="exp-counter">EXP 01/04</span>
+          </div>
+
+          <!-- Camera Viewport -->
+          <div class="relative bg-[#111] w-full max-w-[460px] mx-auto aspect-[5/6] rounded-sm overflow-hidden border-[8px] border-[#1a1a1a] mb-6 shadow-2xl ring-1 ring-zinc-800">
+              
+              <div id="permission-overlay" class="absolute inset-0 z-40 bg-black/90 text-white flex flex-col items-center justify-center p-6 text-center">
+                  <svg class="w-12 h-12 mb-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  <h3 class="font-bold text-lg tracking-widest mb-2 text-red-500">CAMERA ACCESS REQUIRED</h3>
+                  <p class="text-xs text-zinc-400 mb-6 max-w-sm leading-relaxed">Please allow camera access in your browser to start the photobooth session.</p>
+                  <button id="enable-camera-btn" class="bg-white text-black px-6 py-3 text-[10px] font-bold tracking-widest uppercase hover:bg-gray-200 transition-colors">Enable Camera</button>
+              </div>
+
+              <!-- Live Feed -->
+              <video id="camera-feed" class="w-full h-full object-cover" autoplay playsinline muted></video>
+
+              <!-- In-Camera Overlays -->
+              <div class="absolute top-4 left-4 z-20 text-[9px] font-mono text-white/60 tracking-widest pointer-events-none">
+                  FOCUS: INFINITY
+              </div>
+              <div class="absolute bottom-4 left-4 z-20 text-white font-mono flex flex-col gap-1 pointer-events-none">
+                  <div class="flex items-center gap-2 text-sm">
+                      <span class="w-3 h-3 rounded-full border border-[#c83232]"></span>
+                      <span id="timecode">35mm f/2.8</span>
+                  </div>
+                  <div class="text-[8px] text-white/50 tracking-widest uppercase">
+                      METERING: CENTER-WEIGHTED
+                  </div>
+              </div>
+              <div class="absolute bottom-4 right-4 z-20 text-[8px] font-mono text-white/50 tracking-widest uppercase pointer-events-none">
+                  <span id="overlay-mode-text">FILM: ILFORD HP5</span>
+              </div>
+
+              <!-- Grain Overlay -->
+              <div class="absolute inset-0 pointer-events-none z-10 opacity-30 mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+
+              <!-- Prompt Overlay -->
+              <div id="prompt-overlay" class="absolute bottom-12 w-full flex justify-center z-20 pointer-events-none">
+                  <span id="prompt-text" class="text-white font-serif-italic text-[32px] drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] opacity-0 transition-opacity duration-500"></span>
+              </div>
+
+              <!-- Flash Overlay -->
+              <div id="flash-overlay" class="absolute inset-0 bg-white opacity-0 pointer-events-none z-30"></div>
+
+              <!-- Countdown Overlay -->
+              <div id="countdown-overlay" class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                  <span id="countdown-text" class="text-[140px] font-serif-italic font-bold text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] opacity-0 transition-opacity duration-300"></span>
+              </div>
+          </div>
+
+          <!-- Controls -->
+          <button id="start-btn" class="w-full bg-[#1a1a1a] border border-[#333] text-white py-5 font-bold text-[12px] tracking-[0.2em] uppercase hover:bg-[#222] transition-colors rounded-sm shadow-[inset_0_-2px_0_rgba(0,0,0,0.5)] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+              WIND & SHOOT
+              <span class="w-4 h-4 rounded-full bg-[#c83232] shadow-inner ml-2"></span>
+          </button>
+
+          <!-- Bottom Status Layout -->
+          <div class="w-full flex justify-end gap-8 mt-6 text-right">
+              <div class="flex flex-col">
+                  <span class="text-[9px] font-mono text-zinc-500 tracking-widest mb-1">TINT</span>
+                  <span class="text-xs font-mono tracking-widest" id="tint-status">NEUTRAL</span>
+              </div>
+              <div class="w-px bg-zinc-800"></div>
+              <div class="flex flex-col">
+                  <span class="text-[9px] font-mono text-zinc-500 tracking-widest mb-1">FRAME</span>
+                  <span class="text-xs font-mono tracking-widest"><span id="frame-current">01</span> / 04</span>
+              </div>
+          </div>
+      </main>
+
+      <!-- View 2: Print Page -->
+      <main id="view-print" class="hidden grid md:grid-cols-[300px_1fr] gap-16 items-start flex-grow w-full max-w-5xl mx-auto mb-16">
+          
+          <!-- Actions Sidebar -->
+          <div class="flex flex-col gap-12 sticky top-10">
+              
+              <!-- Actions Block -->
+              <div>
+                  <h3 class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-4">ACTIONS</h3>
+                  <div class="flex flex-col gap-3">
+                      <button id="download-btn" class="w-full bg-[#1a1a1a] text-white px-4 py-4 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-red-500 transition-colors flex justify-between items-center">
+                          DOWNLOAD STRIP
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                      </button>
+                      <button id="share-btn" class="w-full bg-white border border-gray-200 text-gray-800 px-4 py-4 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-gray-50 transition-colors flex justify-between items-center">
+                          SHARE TO IG
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                      </button>
+                      <button id="start-over-btn" class="w-full bg-transparent text-gray-500 px-4 py-4 text-[10px] font-bold tracking-[0.2em] uppercase hover:text-black transition-colors flex justify-between items-center mt-2 border-t border-gray-200 pt-6">
+                          START OVER
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                      </button>
+                  </div>
+              </div>
+
+              <!-- Editor's Note -->
+              <div>
+                  <h3 class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-4">EDITOR'S NOTE</h3>
+                  <div class="bg-white border border-gray-200 p-6 shadow-sm relative">
+                      <div class="absolute -top-3 left-6 w-12 h-6 bg-gray-100/80 backdrop-blur-sm transform rotate-2"></div>
+                      <p class="font-serif-italic text-gray-700 text-sm leading-relaxed mb-4">
+                          "The grain is not an imperfection; it is the physical architecture of the memory. This strip captures the stillness of the process."
+                      </p>
+                      <div class="text-right text-[9px] font-mono tracking-widest text-gray-400 uppercase">
+                          — ARCHIVIST 01
+                      </div>
+                  </div>
+              </div>
+
+              <div class="text-[9px] font-mono text-gray-400 uppercase tracking-widest border-t border-gray-200 pt-4 flex justify-between">
+                  <span>CAPTURED: <span id="capture-date"></span></span>
+                  <span>FORMAT: DIGITAL</span>
+              </div>
+          </div>
+
+          <!-- Print Area -->
+          <div class="w-full flex justify-center">
+              <div class="w-full max-w-[460px] printer-slot overflow-hidden bg-gray-100 pb-10 min-h-[600px] shadow-inner">
+                  <img id="final-print-image" src="" alt="Photo Strip" class="w-full shadow-2xl">
+              </div>
+          </div>
+
+      </main>
+
+  </div>
+  
+  <canvas id="capture-canvas" class="hidden"></canvas>
+  <script src="booth.js"></script>
+</body>
+</html>
