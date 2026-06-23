@@ -30,6 +30,13 @@
         body.page-loaded {
             opacity: 1;
         }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            animation: marquee 20s linear infinite;
+        }
     </style>
     <script>
         window.addEventListener("pageshow", () => {
@@ -71,7 +78,7 @@
             </div>
             <nav class="hidden md:flex gap-10 text-[10px] font-bold tracking-widest text-gray-500 uppercase">
                 <a href="index.html" class="hover:text-red-500 transition-colors">Home</a>
-                <a href="how-it-works.html" class="text-black border-b-[1.5px] border-black pb-1">How it works</a>
+                <a href="how-it-works.html" class="text-red-500 border-b-[1.5px] border-red-500 pb-1">How it works</a>
                 <a href="index.html#scrapbook" class="hover:text-red-500 transition-colors">Scrapbook</a>
             </nav>
         </header>
@@ -88,14 +95,31 @@
 
     <!-- Marquee -->
     <div class="w-full border-y border-gray-200/60 py-3.5 mb-32 bg-[#f7f7f7]/80 backdrop-blur-sm overflow-hidden flex whitespace-nowrap">
-        <div class="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 flex items-center justify-between w-full max-w-[1400px] mx-auto px-4">
-            <span>ARCHIVAL QUALITY</span> <span class="mx-6 text-[8px]">⚬</span>
-            <span>GRAIN SYNTHESIS</span> <span class="mx-6 text-[8px]">⚬</span>
-            <span>PHYSICAL STRIPS</span> <span class="mx-6 text-[8px]">⚬</span>
-            <span>DARKROOM TECH</span> <span class="mx-6 text-[8px]">⚬</span>
-            <span>ARCHIVAL QUALITY</span> <span class="mx-6 text-[8px]">⚬</span>
-            <span>GRAIN SYNTHESIS</span> <span class="mx-6 text-[8px]">⚬</span>
-            <span>PHYSICAL STRIPS</span>
+        <div class="flex w-max animate-marquee gap-12 text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400">
+            <div class="flex items-center gap-12">
+                <span>ARCHIVAL QUALITY</span> <span class="text-[8px]">⚬</span>
+                <span>GRAIN SYNTHESIS</span> <span class="text-[8px]">⚬</span>
+                <span>PHYSICAL STRIPS</span> <span class="text-[8px]">⚬</span>
+                <span>DARKROOM TECH</span> <span class="text-[8px]">⚬</span>
+            </div>
+            <div class="flex items-center gap-12">
+                <span>ARCHIVAL QUALITY</span> <span class="text-[8px]">⚬</span>
+                <span>GRAIN SYNTHESIS</span> <span class="text-[8px]">⚬</span>
+                <span>PHYSICAL STRIPS</span> <span class="text-[8px]">⚬</span>
+                <span>DARKROOM TECH</span> <span class="text-[8px]">⚬</span>
+            </div>
+            <div class="flex items-center gap-12">
+                <span>ARCHIVAL QUALITY</span> <span class="text-[8px]">⚬</span>
+                <span>GRAIN SYNTHESIS</span> <span class="text-[8px]">⚬</span>
+                <span>PHYSICAL STRIPS</span> <span class="text-[8px]">⚬</span>
+                <span>DARKROOM TECH</span> <span class="text-[8px]">⚬</span>
+            </div>
+            <div class="flex items-center gap-12">
+                <span>ARCHIVAL QUALITY</span> <span class="text-[8px]">⚬</span>
+                <span>GRAIN SYNTHESIS</span> <span class="text-[8px]">⚬</span>
+                <span>PHYSICAL STRIPS</span> <span class="text-[8px]">⚬</span>
+                <span>DARKROOM TECH</span> <span class="text-[8px]">⚬</span>
+            </div>
         </div>
     </div>
 
@@ -108,10 +132,10 @@
                 <div class="relative z-10 md:pl-4">
                     <h2 class="text-3xl md:text-4xl font-serif mb-5 text-gray-900">Strike a pose.</h2>
                     <p class="text-gray-500 text-[13px] leading-relaxed max-w-[320px] mb-8">
-                        Enter our digital studio. Align yourself with the frame. No filters, no edits—just the raw geometry of the moment captured in high-fidelity monochrome.
+                        Enter our digital studio. Align yourself with the frame. Experience the raw geometry of the moment captured in high-fidelity formats.
                     </p>
                     <div class="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400 flex items-center gap-2">
-                        <span class="w-2 h-2 border-[1.5px] border-gray-400"></span> LIVE VIEW ACTIVE
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> LIVE VIEW ACTIVE
                     </div>
                 </div>
             </div>
@@ -208,17 +232,18 @@
     <!-- Footer -->
     <footer class="w-full bg-[#f2f2f2] py-14 border-t border-gray-200">
         <div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
-            <div class="font-serif font-bold text-[18px] tracking-[0.15em] text-gray-900">SILVER HALIDE</div>
+            <div class="font-serif font-bold text-[18px] tracking-[0.15em] text-gray-900">FILMBOOTH</div>
             <nav class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-[9px] uppercase font-bold tracking-[0.25em] text-gray-500">
-                <a href="#" class="hover:text-black transition-colors">PRIVACY</a>
-                <a href="#" class="hover:text-black transition-colors">TERMS</a>
-                <a href="#" class="hover:text-black transition-colors">INSTAGRAM</a>
-                <a href="#" class="hover:text-black transition-colors">ARCHIVE</a>
+                <a href="#" class="hover:text-red-500 transition-colors">PRIVACY</a>
+                <a href="#" class="hover:text-red-500 transition-colors">TERMS</a>
+                <a href="#" class="hover:text-red-500 transition-colors">INSTAGRAM</a>
+                <a href="#" class="hover:text-red-500 transition-colors">ARCHIVE</a>
             </nav>
             <div class="text-[9px] uppercase font-bold tracking-[0.15em] text-gray-400 font-mono text-center md:text-right">
-                © 2024 SILVER HALIDE ARCHIVE. ALL RIGHTS RESERVED.
+                © 2026 FILMBOOTH ARCHIVE. ALL RIGHTS RESERVED.
             </div>
         </div>
     </footer>
+    <script src="cursor.js"></script>
 </body>
 </html>

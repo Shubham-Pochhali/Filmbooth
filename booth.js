@@ -99,11 +99,37 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 3; i > 0; i--) {
             countdownText.innerText = i;
             countdownText.style.transform = 'scale(1.2)';
+            playBeepSound();
             await sleep(100);
             countdownText.style.transform = 'scale(1)';
             await sleep(900);
         }
         countdownText.style.opacity = '0';
+    }
+
+    function playBeepSound() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const actx = new AudioContext();
+            const osc = actx.createOscillator();
+            const gainNode = actx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, actx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0, actx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, actx.currentTime + 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, actx.currentTime + 0.15);
+            
+            osc.connect(gainNode);
+            gainNode.connect(actx.destination);
+            
+            osc.start(actx.currentTime);
+            osc.stop(actx.currentTime + 0.2);
+            
+            setTimeout(() => { actx.close(); }, 300);
+        } catch(e) {}
     }
 
     function playShutterSound() {
@@ -153,23 +179,48 @@ document.addEventListener('DOMContentLoaded', () => {
             const actx = new AudioContext();
             
             const duration = 6.0; 
+            
             const osc = actx.createOscillator();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(40, actx.currentTime);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(60, actx.currentTime);
             
             for(let i=0; i<60; i++) {
-                osc.frequency.linearRampToValueAtTime(40 + (i%2===0?15:0), actx.currentTime + (i*0.1));
+                osc.frequency.linearRampToValueAtTime(60 + (i%2===0?5:0), actx.currentTime + (i*0.1));
             }
             
-            const gain = actx.createGain();
-            gain.gain.setValueAtTime(0.05, actx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.05, actx.currentTime + duration - 0.5);
-            gain.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
+            const oscGain = actx.createGain();
+            oscGain.gain.setValueAtTime(0.3, actx.currentTime);
+            oscGain.gain.linearRampToValueAtTime(0.6, actx.currentTime + duration/2);
+            oscGain.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
             
-            osc.connect(gain);
-            gain.connect(actx.destination);
+            osc.connect(oscGain);
+            oscGain.connect(actx.destination);
             osc.start(actx.currentTime);
             osc.stop(actx.currentTime + duration);
+
+            const bufferSize = actx.sampleRate * duration;
+            const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+            
+            const noise = actx.createBufferSource();
+            noise.buffer = buffer;
+            
+            const noiseFilter = actx.createBiquadFilter();
+            noiseFilter.type = 'lowpass';
+            noiseFilter.frequency.value = 800;
+
+            const noiseGain = actx.createGain();
+            noiseGain.gain.setValueAtTime(0, actx.currentTime);
+            noiseGain.gain.linearRampToValueAtTime(0.15, actx.currentTime + 0.5);
+            noiseGain.gain.linearRampToValueAtTime(0.15, actx.currentTime + duration - 0.5);
+            noiseGain.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(actx.destination);
+            
+            noise.start(actx.currentTime);
             
             setTimeout(() => { actx.close(); }, duration * 1000 + 100);
         } catch(e){}
