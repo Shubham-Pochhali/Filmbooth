@@ -3,14 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FILMBOOTH - The aesthetic web photobooth</title>
+    <title>FILMBOOTH - Free Online Vintage Aesthetic Photobooth & Photo Strip Maker</title>
     <meta name="description" content="FILMBOOTH is a free, aesthetic virtual photobooth. Snap vintage and polaroid style pictures online with no sign-ups or downloads.">
     <meta name="keywords" content="photo booth, virtual photobooth, aesthetic photobooth online, free online photobooth, vintage photobooth, polaroid maker, photostrip maker">
-    <meta property="og:title" content="FILMBOOTH - The aesthetic web photobooth">
+    <meta property="og:title" content="FILMBOOTH - Free Online Vintage Aesthetic Photobooth & Photo Strip Maker">
     <meta property="og:description" content="Step inside the internet's cutest photobooth. Snap pics with your webcam, apply vintage film filters, and print gorgeous Y2K photo strips instantly.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://thephotobooth.in/assets/image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://thephotobooth.in/">
     <link rel="canonical" href="https://thephotobooth.in/">
+    <link rel="icon" href="assets/favicon.png">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Filmbooth",
+  "url": "https://thephotobooth.in",
+  "logo": "https://thephotobooth.in/assets/favicon.png",
+  "description": "A free aesthetic online photobooth for creating vintage photo strips directly in your browser.",
+  "founder": {
+    "@type": "Person",
+    "name": "Shubham Pochhali"
+  },
+  "sameAs": [
+    "https://github.com/Shubham-Pochhali",
+    "https://www.linkedin.com/in/shubham-pochhali-681036285/"
+  ]
+}
+</script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,7 +137,7 @@
               
               <div class="flex items-center gap-8 mb-12">
                   <a href="booth.html" class="bg-[#111] text-white px-8 py-4 font-bold text-[11px] tracking-widest hover:bg-red-500 transition-colors">START THE BOOTH</a>
-                  <a href="#how-it-works" class="font-bold text-[11px] tracking-widest uppercase hover:underline flex items-center gap-2">
+                  <a href="how-it-works.html" class="font-bold text-[11px] tracking-widest uppercase hover:underline flex items-center gap-2">
                     SEE HOW IT WORKS
                   </a>
               </div>
@@ -251,7 +273,6 @@
 
               <!-- Callout Box -->
               <div class="bg-[#1f1f1f] border border-white/5 max-w-[360px] mx-auto py-8 px-6 rounded-sm relative shadow-2xl">
-                  <img src="assets/sticker.png" alt="Sticker" class="absolute -bottom-8 -right-8 w-20 h-20 sticker-rotate drop-shadow-xl z-20 object-contain">
                   <div class="absolute -top-4 left-1/2 -translate-x-1/2 drop-shadow-lg">
                       <svg class="w-8 h-8 text-red-600 transform -rotate-12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V5.5C16 4.67 15.33 4 14.5 4H9.5C8.67 4 8 4.67 8 5.5V11L6 14V16H11V21H13V16H18V14L16 11Z"/></svg>
                   </div>
@@ -282,9 +303,9 @@
               <div>
                   <h4 class="font-bold tracking-widest text-[10px] uppercase text-gray-900 mb-6">FREE PHOTO TOOLS</h4>
                   <ul class="space-y-4 font-mono text-xs text-blue-900/80">
-                      <li><a href="#" class="hover:text-black hover:underline transition-colors">• Online Photobooth</a></li>
-                      <li><a href="#" class="hover:text-black hover:underline transition-colors">• Vintage Photobooth</a></li>
-                      <li><a href="#" class="hover:text-black hover:underline transition-colors">• Photostrip Maker</a></li>
+                      <li><a href="/" class="hover:text-black hover:underline transition-colors">• Online Photobooth</a></li>
+                      <li><a href="/" class="hover:text-black hover:underline transition-colors">• Vintage Photobooth</a></li>
+                      <li><a href="/" class="hover:text-black hover:underline transition-colors">• Photostrip Maker</a></li>
                   </ul>
               </div>
               <div>
@@ -311,14 +332,13 @@
           </div>
           <div class="grid grid-cols-2 gap-8 md:justify-items-end text-[10px] font-bold tracking-widest uppercase">
               <div class="space-y-5">
-                  <h4 class="text-gray-900 mb-6">TOOLS</h4>
-                  <a href="#" class="block text-gray-500 hover:text-black transition-colors">Photostrip Maker</a>
-                  <a href="#" class="block text-gray-500 hover:text-black transition-colors">Polaroid Frame Maker</a>
+                  <h4 class="text-gray-900 mb-6">SOCIAL</h4>
+                  <a href="https://www.linkedin.com/in/shubham-pochhali-681036285/" target="_blank" class="block text-gray-500 hover:text-black transition-colors">LinkedIn</a>
+                  <a href="https://github.com/Shubham-Pochhali" target="_blank" class="block text-gray-500 hover:text-black transition-colors">GitHub</a>
               </div>
               <div class="space-y-5">
-                  <h4 class="text-gray-900 mb-6">LEGAL</h4>
-                  <a href="#" class="block text-gray-500 hover:text-black transition-colors">Privacy</a>
-                  <a href="#" class="block text-gray-500 hover:text-black transition-colors">Terms</a>
+                  <h4 class="text-gray-900 mb-6">CONTACT</h4>
+                  <a href="mailto:pochhali.dev@gmail.com" class="block text-gray-500 hover:text-black transition-colors">Email</a>
               </div>
           </div>
       </div>
