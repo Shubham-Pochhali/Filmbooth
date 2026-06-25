@@ -12,6 +12,7 @@
     <meta property="og:url" content="https://thephotobooth.in/how-it-works">
     <link rel="canonical" href="https://thephotobooth.in/how-it-works">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="transition.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -30,13 +31,6 @@
     </style>
     <style>
         html { scroll-behavior: smooth; }
-        body {
-            opacity: 0;
-            transition: opacity 0.4s ease-out;
-        }
-        body.page-loaded {
-            opacity: 1;
-        }
         @keyframes marquee {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
@@ -63,42 +57,24 @@
                 filter: saturate(1) contrast(1) blur(0) brightness(1);
             }
         }
+
+        /* Mechanical Button Interaction */
+        .btn-mech {
+            transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), box-shadow 120ms cubic-bezier(0.2, 0, 0, 1), background-color 150ms ease, border-color 150ms ease, color 150ms ease !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            will-change: transform, box-shadow;
+        }
+        .btn-mech:hover {
+            transform: translateY(-1.5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .btn-mech:active {
+            transform: translateY(1px) scale(0.97);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            transition: transform 80ms cubic-bezier(0.4, 0, 1, 1), box-shadow 80ms cubic-bezier(0.4, 0, 1, 1) !important;
+        }
     </style>
     <script>
-        window.addEventListener("pageshow", () => {
-            document.body.classList.add("page-loaded");
-        });
-
-        document.addEventListener("click", (e) => {
-            const link = e.target.closest("a");
-            if (!link || !link.href) return;
-            
-            try {
-                const url = new URL(link.href, window.location.href);
-                const isLocal = url.protocol === 'file:' || url.origin === window.location.origin;
-                const isSamePage = url.pathname === window.location.pathname;
-                const hasHash = url.hash.length > 0;
-                
-                if (isLocal && !isSamePage) {
-                    e.preventDefault();
-                    document.body.classList.remove("page-loaded");
-                    setTimeout(() => {
-                        window.location.href = link.href;
-                    }, 400);
-                } else if (isLocal && isSamePage && hasHash) {
-                    // Smooth scroll for anchor links
-                    e.preventDefault();
-                    const targetId = url.hash.substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            } catch (err) {
-                // Not a valid URL or other error, let browser handle normally
-            }
-        });
-
         // Initialize scroll reveal
         document.addEventListener("DOMContentLoaded", () => {
             const observer = new IntersectionObserver((entries) => {
@@ -323,10 +299,10 @@
             Join 12,000+ creators preserving their digital moments in archival silver.
         </p>
         <div class="flex flex-col sm:flex-row items-center gap-6">
-            <a href="booth.html" class="bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] px-10 py-3.5 hover:bg-gray-200 transition-colors">
+            <a href="booth.html" class="bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] px-10 py-3.5 hover:bg-gray-200 transition-colors btn-mech">
                 OPEN STUDIO
             </a>
-            <a href="#" class="text-[10px] font-bold uppercase tracking-[0.2em] px-10 py-3.5 border border-gray-600 hover:border-white transition-colors">
+            <a href="#" class="text-[10px] font-bold uppercase tracking-[0.2em] px-10 py-3.5 border border-gray-600 hover:border-white transition-colors btn-mech">
                 VIEW GALLERY
             </a>
         </div>

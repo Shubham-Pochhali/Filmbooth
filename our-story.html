@@ -6,6 +6,7 @@
     <title>FILMBOOTH - Our Story</title>
     <meta name="description" content="Read the story behind FILMBOOTH. A tactile, privacy-first virtual photobooth designed by Shubham Pochhali.">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="transition.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -14,12 +15,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #f4f4f2;
             color: #111827;
-            opacity: 0;
-            transition: opacity 0.4s ease-out;
             background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.03"/%3E%3C/svg%3E');
-        }
-        body.page-loaded {
-            opacity: 1;
         }
         .font-serif {
             font-family: 'Playfair Display', serif;
@@ -61,12 +57,24 @@
                 filter: saturate(1) contrast(1) blur(0) brightness(1);
             }
         }
+
+        /* Mechanical Button Interaction */
+        .btn-mech {
+            transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), box-shadow 120ms cubic-bezier(0.2, 0, 0, 1), background-color 150ms ease, border-color 150ms ease, color 150ms ease !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            will-change: transform, box-shadow;
+        }
+        .btn-mech:hover {
+            transform: translateY(-1.5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .btn-mech:active {
+            transform: translateY(1px) scale(0.97);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            transition: transform 80ms cubic-bezier(0.4, 0, 1, 1), box-shadow 80ms cubic-bezier(0.4, 0, 1, 1) !important;
+        }
     </style>
     <script>
-        window.addEventListener("pageshow", () => {
-            document.body.classList.add("page-loaded");
-        });
-
         // Initialize scroll reveal
         document.addEventListener("DOMContentLoaded", () => {
             const observer = new IntersectionObserver((entries) => {
@@ -183,7 +191,7 @@
                             Filmbooth began with a simple idea: Digital photos are easy to take, but they rarely feel special. We wanted to recreate the nostalgia of stepping into a vintage photobooth — the countdown, the shutter click, the printed strip, and the imperfect charm of analog photography — all inside a web browser.
                         </p>
 
-                        <a href="booth.html" class="bg-[#111] text-white px-8 py-4 font-bold text-[10px] tracking-widest uppercase hover:bg-red-600 transition-colors">
+                        <a href="booth.html" class="bg-[#111] text-white px-8 py-4 font-bold text-[10px] tracking-widest uppercase hover:bg-red-600 transition-colors btn-mech">
                             LAUNCH BOOTH
                         </a>
                     </div>
