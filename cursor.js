@@ -1,5 +1,8 @@
 (function() {
     function initCursor() {
+        // Disable custom cursor on smartphones/touch devices
+        if (window.matchMedia("(hover: none) and (pointer: coarse)").matches || window.innerWidth <= 768) return;
+
         if (document.getElementById('custom-cursor-style')) return;
 
         const style = document.createElement('style');

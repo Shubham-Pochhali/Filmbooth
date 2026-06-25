@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let finalStripUrl = null;
     let selectedFilmStock = 'bw';
     let globalAudioCtx = null;
-    let isFirstCapture = true;
 
     function initAudioContext() {
         if (!globalAudioCtx) {
@@ -100,16 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         initAudioContext();
 
-        if (isFirstCapture) {
-            startBtn.classList.remove('animate-pulse-once'); // fallback cleanup
-            startBtn.classList.add('animate-pulse');
-            
-            const helper = document.getElementById('onboarding-helper');
-            if (helper) {
-                helper.style.opacity = '1';
-            }
-        }
-
         await initCamera();
         
         if (cLeft && cRight) {
@@ -118,6 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cRight.classList.remove('closed');
             cLeft.classList.add('open-sides');
             cRight.classList.add('open-sides');
+        }
+        
+        // Auto-start shooting after entering studio if camera is ready
+        await sleep(500);
+        if (stream) {
+            startBtn.click();
         }
     }
 
@@ -416,15 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Please enable camera access first.");
             return;
         }
-
-        if (isFirstCapture) {
-            isFirstCapture = false;
-            const helper = document.getElementById('onboarding-helper');
-            if (helper) {
-                helper.style.opacity = '0';
-            }
-        }
-        startBtn.classList.remove('animate-pulse');
 
         startBtn.disabled = true;
         startBtn.innerHTML = `WINDING... <span class="w-4 h-4 rounded-full bg-[#c83232] animate-pulse ml-2"></span>`;
