@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FILMBOOTH - Our Story</title>
+    <meta name="description" content="Read the story behind FILMBOOTH. A tactile, privacy-first virtual photobooth designed by Shubham Pochhali.">
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f2;
+            color: #111827;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.03"/%3E%3C/svg%3E');
+        }
+        body.page-loaded {
+            opacity: 1;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-serif-italic {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+        .safelight-hover {
+            transition: filter 0.6s ease-in-out;
+        }
+        .safelight-hover:hover {
+            filter: sepia(0.4) hue-rotate(320deg) saturate(3) brightness(0.95) contrast(1.1) drop-shadow(0 0 8px rgba(220, 38, 38, 0.2));
+        }
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+    </style>
+    <script>
+        window.addEventListener("pageshow", () => {
+            document.body.classList.add("page-loaded");
+        });
+    </script>
+</head>
+<body class="min-h-screen flex flex-col font-sans relative text-gray-900 bg-[#f4f4f2] items-center">
+    
+    <!-- Header -->
+    <div class="w-full max-w-[1200px] mx-auto px-6 pt-10 pb-16">
+        <header class="flex justify-between items-center mb-16 md:mb-24">
+            <div class="flex items-center gap-2">
+                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <a href="index.html" class="font-bold tracking-[0.2em] text-lg hover:text-red-600 transition-colors text-gray-900">FILMBOOTH</a>
+            </div>
+            <nav class="hidden md:flex gap-10 text-[10px] font-bold tracking-widest text-gray-500 uppercase">
+                <a href="index.html" class="hover:text-red-500 transition-colors">Home</a>
+                <a href="how-it-works.html" class="hover:text-red-500 transition-colors">How it works</a>
+                <a href="our-story.html" class="text-red-500 border-b-[1.5px] border-red-500 pb-1">Our Story</a>
+                <a href="index.html#scrapbook" class="hover:text-red-500 transition-colors">Scrapbook</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-5xl mx-auto flex flex-col items-center">
+            
+            <!-- Hero Grid -->
+            <div class="grid md:grid-cols-[1fr_420px] gap-12 lg:gap-24 w-full mb-20 items-start">
+                
+                <!-- Left Column -->
+                <div class="flex relative w-full pt-4">
+                    
+                    <!-- Vertical Text -->
+                    <div class="absolute -left-12 top-0 text-[9px] font-mono tracking-[0.2em] text-gray-400 vertical-text h-[120px]">
+                        ABOUT // 01
+                    </div>
+
+                    <div class="w-full flex flex-col items-start pl-6 md:pl-0">
+                        <!-- Badge -->
+                        <div class="text-red-500 text-[9px] font-bold tracking-[0.2em] mb-4 font-mono uppercase flex items-center gap-4">
+                            EST . 2026
+                            <div class="w-4 h-[1.5px] bg-red-500"></div>
+                        </div>
+
+                        <h1 class="text-[52px] md:text-[64px] font-serif font-bold leading-none mb-6 text-gray-900 tracking-tight italic">
+                            About Filmbooth.
+                        </h1>
+                        
+                        <p class="text-[13px] text-gray-600 leading-relaxed mb-10 max-w-sm">
+                            Filmbooth began with a simple idea: Digital photos are easy to take, but they rarely feel special. We wanted to recreate the nostalgia of stepping into a vintage photobooth — the countdown, the shutter click, the printed strip, and the imperfect charm of analog photography — all inside a web browser.
+                        </p>
+
+                        <a href="booth.html" class="bg-[#111] text-white px-8 py-4 font-bold text-[10px] tracking-widest uppercase hover:bg-red-600 transition-colors">
+                            LAUNCH BOOTH
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column Glowing Image -->
+                <div class="w-full bg-[#e8e6e1] p-3 shadow-md border border-gray-200 group relative">
+                    <img src="assets/darkroom_lamp.png" alt="Vintage Darkroom" class="w-full aspect-[4/5] object-cover grayscale contrast-125 safelight-hover cursor-crosshair border border-gray-300">
+                </div>
+
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid md:grid-cols-2 gap-8 w-full mb-12">
+                <!-- Tactile Design Card -->
+                <div class="w-full bg-[#f0eee9] p-10 border border-gray-200/60 shadow-sm relative overflow-hidden group">
+                    <svg class="w-6 h-6 text-red-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                    <h3 class="font-serif font-bold text-2xl mb-4 text-gray-900">Tactile Design</h3>
+                    <p class="text-[13px] text-gray-500 leading-relaxed max-w-sm">
+                        Every interaction was intentionally designed to feel tactile, from the camera interface to the printing animation and film-inspired layouts.
+                    </p>
+                </div>
+
+                <!-- Privacy First Card -->
+                <div class="w-full bg-[#f0eee9] p-10 border border-gray-200/60 shadow-sm">
+                    <svg class="w-6 h-6 text-red-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <h3 class="font-serif font-bold text-2xl mb-4 text-gray-900">Privacy First</h3>
+                    <p class="text-[13px] text-gray-500 leading-relaxed max-w-sm">
+                        Unlike most online photo editors, Filmbooth processes everything locally in your browser. Your photos stay on your device.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Credits Box -->
+            <div class="w-full bg-[#eae8e3] py-14 px-10 mb-20 relative shadow-sm max-w-[800px] mx-auto border-t-[2px] border-b-[2px] border-gray-300">
+                <div class="absolute top-0 left-8 w-[40px] h-[2px] bg-red-600 transform -translate-y-[2px]"></div>
+                <div class="absolute bottom-0 right-8 w-[40px] h-[2px] bg-red-600 transform translate-y-[2px]"></div>
+                
+                <h3 class="font-serif font-bold text-2xl md:text-3xl mb-4 text-gray-900 text-center">Credits</h3>
+                <p class="text-[13px] md:text-sm text-gray-600 font-medium leading-relaxed text-center mb-10 max-w-lg mx-auto">
+                    Filmbooth was designed and developed by <a href="https://github.com/Shubham-Pochhali" target="_blank">Shubham Pochhali</a> as an exploration of nostalgic interface design and modern web technologies.
+                </p>
+                <div class="flex justify-center gap-8 text-[9px] font-bold tracking-[0.2em] uppercase pt-4">
+                    <a href="https://github.com/Shubham-Pochhali" target="_blank" class="text-gray-900 hover:text-red-600 transition-colors">GITHUB</a>
+                    <a href="https://www.linkedin.com/in/shubham-pochhali-681036285/" target="_blank" class="text-gray-900 hover:text-red-600 transition-colors">LINKEDIN</a>
+                    <a href="mailto:pochhali.dev@gmail.com" class="text-gray-900 hover:text-red-600 transition-colors">EMAIL</a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Minimalist Footer -->
+    <footer class="w-full bg-[#e6e4df] py-12 px-8 flex flex-col md:flex-row justify-between items-center max-w-[1400px] mx-auto border-t border-gray-300/50">
+        <div class="flex flex-col items-center md:items-start mb-8 md:mb-0">
+            <h2 class="font-bold tracking-[0.15em] text-2xl mb-1 text-gray-900 font-serif">FILMBOOTH</h2>
+            <div class="text-[8px] font-mono tracking-widest text-gray-400 uppercase">
+                © 2026 ARCHIVAL SYSTEMS.
+            </div>
+        </div>
+        <nav class="flex gap-6 text-[9px] uppercase font-bold tracking-widest text-gray-500">
+            <a href="index.html#scrapbook" class="hover:text-red-600 transition-colors">GALLERY</a>
+            <a href="our-story.html" class="text-red-600 border-b-[1.5px] border-red-600 pb-1">OUR STORY</a>
+            <a href="how-it-works.html" class="hover:text-red-600 transition-colors">DEVELOP</a>
+        </nav>
+    </footer>
+
+    <script src="cursor.js"></script>
+</body>
+</html>

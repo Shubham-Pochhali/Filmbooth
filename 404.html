@@ -3,34 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FILMBOOTH - 404 Not Found</title>
+    <title>FILMBOOTH - 404</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111;
-            color: #f3f4f6;
+            background-color: #faf9f6;
+            color: #111827;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.03"/%3E%3C/svg%3E');
         }
-        .font-serif-italic {
+        .font-serif {
             font-family: 'Playfair Display', serif;
-            font-style: italic;
+        }
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+        .polaroid {
+            transform: rotate(-2deg);
+            transition: transform 0.4s ease;
+        }
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+        
+        /* Scrolling Marquee */
+        .marquee-content {
+            animation: scroll 30s linear infinite;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center bg-[#111]">
-    <div class="text-center px-6">
-        <h1 class="text-[120px] md:text-[180px] font-bold font-serif-italic text-red-600 leading-none mb-4 drop-shadow-[0_0_15px_rgba(220,38,38,0.4)]">404</h1>
-        <h2 class="text-xl md:text-2xl font-bold tracking-[0.2em] uppercase text-gray-200 mb-6">Page Not Found</h2>
-        <p class="text-gray-400 text-sm mb-12 max-w-md mx-auto leading-relaxed">
-            Looks like this film strip got lost in the darkroom. The page you are looking for does not exist or has been moved.
-        </p>
-        <a href="index.html" class="inline-block bg-white text-black px-8 py-4 font-bold text-[11px] tracking-widest hover:bg-red-600 hover:text-white transition-colors duration-300">
-            RETURN TO BOOTH
-        </a>
+<body class="min-h-screen flex flex-col font-sans relative text-gray-900 bg-white overflow-hidden">
+    
+    <div class="flex-1 w-full max-w-[1100px] mx-auto px-6 flex items-center justify-center pt-10 pb-24">
+        
+        <div class="grid md:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
+            
+            <!-- Polaroid Image -->
+            <div class="flex justify-center md:justify-end">
+                <div class="bg-white p-4 pb-12 shadow-2xl border border-gray-100 polaroid w-full max-w-[400px] relative">
+                    <!-- Faint tape piece -->
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-8 bg-white/40 border border-gray-200/50 transform rotate-1 backdrop-blur-sm shadow-sm z-10"></div>
+                    
+                    <img src="assets/darkroom_lamp.png" alt="Lost Frame" class="w-full aspect-square object-cover grayscale brightness-90 contrast-125 border border-gray-200">
+                    
+                    <div class="absolute bottom-4 flex justify-between w-[calc(100%-2rem)] text-[10px] font-mono text-gray-500 font-bold uppercase tracking-widest">
+                        <span class="italic">Frame_0404.lost</span>
+                        <span class="text-gray-900">AUG_1998</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Details -->
+            <div class="flex flex-col items-start w-full">
+                <div class="text-red-600 text-[9px] font-bold tracking-[0.2em] mb-4 font-mono uppercase">
+                    TECHNICAL FAULT
+                </div>
+
+                <h1 class="text-[44px] md:text-[56px] font-serif font-bold leading-tight mb-6 text-gray-900 tracking-tight">
+                    404 - Exposure <br class="hidden md:block">Error
+                </h1>
+                
+                <p class="text-[14px] md:text-[15px] text-gray-600 leading-relaxed mb-12 max-w-sm">
+                    This frame seems to have been lost in the developer. Let's get you back to the light.
+                </p>
+
+                <!-- Grid Stats -->
+                <div class="grid grid-cols-2 gap-y-6 gap-x-12 w-full max-w-md border-t border-b border-gray-200 py-6 mb-12 font-mono text-[10px] font-bold tracking-widest uppercase">
+                    <div>
+                        <div class="text-gray-500 mb-1">ISO</div>
+                        <div class="text-black">LOST_DATA</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-500 mb-1">SHUTTER</div>
+                        <div class="text-black">0.000s</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-500 mb-1">APERTURE</div>
+                        <div class="text-black">f/∞</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-500 mb-1">STATUS</div>
+                        <div class="text-red-600">EXPOSED</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-6 w-full">
+                    <a href="index.html" class="bg-[#c22026] text-white px-8 py-4 font-bold text-[10px] tracking-[0.15em] uppercase hover:bg-red-800 transition-colors w-full sm:w-auto text-center shadow-md hover:shadow-lg">
+                        RETURN TO GALLERY &rarr;
+                    </a>
+                    <a href="#" onclick="history.back()" class="text-gray-500 hover:text-black font-mono text-[10px] font-bold tracking-widest uppercase transition-colors">
+                        RE-SHOOT (BACK)
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
     </div>
+
+    <!-- Bottom Marquee Footer -->
+    <div class="w-full absolute bottom-0 border-t border-red-100 bg-gradient-to-t from-red-50/10 to-transparent py-4 overflow-hidden pointer-events-none select-none">
+        <div class="flex whitespace-nowrap text-[9px] font-mono font-bold tracking-[0.3em] text-gray-300 uppercase marquee-content opacity-50">
+            <span class="mr-12">RECOVERING EMULSION <span class="text-red-200 mx-4">•</span> ARCHIVAL FAILURE <span class="text-red-200 mx-4">•</span> NEGATIVES DESTROYED <span class="text-red-200 mx-4">•</span> PROCESSING ERROR 0404 <span class="text-red-200 mx-4">•</span></span>
+            <span class="mr-12">RECOVERING EMULSION <span class="text-red-200 mx-4">•</span> ARCHIVAL FAILURE <span class="text-red-200 mx-4">•</span> NEGATIVES DESTROYED <span class="text-red-200 mx-4">•</span> PROCESSING ERROR 0404 <span class="text-red-200 mx-4">•</span></span>
+            <span class="mr-12">RECOVERING EMULSION <span class="text-red-200 mx-4">•</span> ARCHIVAL FAILURE <span class="text-red-200 mx-4">•</span> NEGATIVES DESTROYED <span class="text-red-200 mx-4">•</span> PROCESSING ERROR 0404 <span class="text-red-200 mx-4">•</span></span>
+        </div>
+    </div>
+
     <script src="cursor.js"></script>
 </body>
 </html>
