@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return captureCanvas.toDataURL('image/png');
     }
 
-    async function generateStrip(images) {
+    async function generateStrip(images, userCaption = '') {
         const stripCanvas = document.createElement('canvas');
         const sCtx = stripCanvas.getContext('2d');
         
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const padding = 40;
         const spacing = 80;
         const topPadding = 40;
-        const bottomPadding = 240;
+        const bottomPadding = 400;
         
         stripCanvas.width = imgWidth + (padding * 2);
         stripCanvas.height = topPadding + (imgHeight * 4) + (spacing * 4) + bottomPadding;
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Add footer text
-        const footerY = stripCanvas.height - bottomPadding + 80;
+        const footerY = stripCanvas.height - bottomPadding + 100;
         
         sCtx.textAlign = 'center';
         sCtx.fillStyle = '#888';
@@ -386,7 +386,17 @@ document.addEventListener('DOMContentLoaded', () => {
         sCtx.fillStyle = '#111';
         sCtx.font = 'italic 72px "Playfair Display", serif';
         sCtx.fillText('Filmbooth', stripCanvas.width / 2, footerY + 80);
-        
+
+        if (userCaption && userCaption.trim() !== '') {
+            sCtx.fillStyle = '#0f172a';
+            sCtx.font = '600 56px "Caveat", cursive';
+            sCtx.save();
+            sCtx.translate(stripCanvas.width / 2, footerY + 200);
+            sCtx.rotate(-2 * Math.PI / 180);
+            sCtx.fillText(userCaption, 0, 0);
+            sCtx.restore();
+        }
+
         // Draw "AUTHENTICATED" tilted box in red
         sCtx.save();
         sCtx.translate(stripCanvas.width - 180, footerY + 60);
@@ -480,15 +490,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         captureDate.innerText = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth()+1).toString().padStart(2, '0')}.${now.getFullYear()}`;
 
-        // Generate strip
-        finalStripUrl = await generateStrip(capturedImages);
-        
         if(loader) {
             loader.classList.add('hidden');
             await sleep(400);
             const loaderText = loader.querySelector('.loader-text');
             if(loaderText) loaderText.innerText = 'Winding...';
         }
+        
+        // Show caption UI BEFORE printing
+        const captionOverlay = document.getElementById('caption-overlay');
+        const captionInput = document.getElementById('caption-input');
+        
+        let userCaption = '';
+        if (captionOverlay && captionInput) {
+            // Position the overlay correctly in the empty printer slot
+            captionOverlay.classList.remove('bottom-16', 'translate-y-4');
+            captionOverlay.classList.add('top-[40%]', '-translate-y-1/2'); 
+            captionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            captionInput.value = '';
+            captionInput.focus();
+
+            const submitCaptionBtn = document.getElementById('submit-caption-btn');
+            if (submitCaptionBtn) {
+                const newSubmitBtn = submitCaptionBtn.cloneNode(true);
+                submitCaptionBtn.parentNode.replaceChild(newSubmitBtn, submitCaptionBtn);
+                
+                const newCaptionInput = captionInput.cloneNode(true);
+                captionInput.parentNode.replaceChild(newCaptionInput, captionInput);
+                
+                newCaptionInput.focus();
+
+                userCaption = await new Promise((resolve) => {
+                    newSubmitBtn.addEventListener('click', () => {
+                        resolve(newCaptionInput.value);
+                    });
+                    newCaptionInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') resolve(newCaptionInput.value);
+                    });
+                });
+            }
+            captionOverlay.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            captionOverlay.classList.remove('top-[40%]', '-translate-y-1/2');
+            captionOverlay.classList.add('bottom-16'); // Reset for next time
+        }
+
+        // Generate strip with the final caption
+        finalStripUrl = await generateStrip(capturedImages, userCaption);
         
         finalPrintImage.onload = () => {
             finalPrintImage.classList.add('printing-animation');
@@ -527,8 +574,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navContainer) navContainer.classList.remove('hidden');
 
         finalPrintImage.classList.remove('printing-animation');
+        finalPrintImage.style.animationPlayState = '';
         finalPrintImage.src = '';
         finalStripUrl = null;
+        
+        const captionInput = document.getElementById('caption-input');
+        if (captionInput) captionInput.value = '';
         
         viewPrint.classList.add('hidden');
         viewSetup.classList.remove('hidden'); // Go back to setup instead of studio

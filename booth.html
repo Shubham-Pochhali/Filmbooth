@@ -15,7 +15,7 @@
     <script src="transition.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600;1,700&family=Space+Mono:wght@400;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
         html { scroll-behavior: smooth; }
         body {
@@ -316,8 +316,17 @@
 
           <!-- Print Area -->
           <div class="w-full flex justify-center">
-              <div class="w-full max-w-[460px] printer-slot overflow-hidden bg-gray-100 pb-10 min-h-[600px] shadow-inner">
+              <div class="w-full max-w-[460px] printer-slot overflow-hidden bg-gray-100 pb-10 min-h-[600px] shadow-inner relative">
                   <img id="final-print-image" src="" alt="Photo Strip" class="w-full shadow-2xl">
+                  
+                  <!-- Caption Input Overlay -->
+                  <div id="caption-overlay" class="absolute bottom-16 left-1/2 -translate-x-1/2 w-3/4 bg-white/95 backdrop-blur shadow-2xl border border-gray-200 p-4 transition-all duration-500 opacity-0 pointer-events-none translate-y-4">
+                      <div class="text-[9px] font-mono text-gray-400 tracking-[0.2em] uppercase mb-2">Write a note</div>
+                      <input type="text" id="caption-input" maxlength="45" placeholder="e.g. Paris 2026..." class="w-full bg-transparent border-b border-gray-300 focus:border-red-500 outline-none font-['Caveat'] text-2xl text-gray-800 py-1 mb-4 placeholder:text-gray-300">
+                      <button id="submit-caption-btn" class="w-full bg-black text-white py-3 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-red-600 transition-colors btn-mech">
+                          SIGN & PRINT
+                      </button>
+                  </div>
               </div>
           </div>
 
