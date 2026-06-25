@@ -69,6 +69,33 @@
     </style>
     <style>
         html { scroll-behavior: smooth; }
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0; }
+            }
+            .animate-blink {
+                animation: blink 2s ease-in-out infinite;
+            }
+
+            /* Photographic Developing Scroll Reveal */
+            .photo-reveal {
+                opacity: 0;
+                filter: saturate(0.85) contrast(0.9) blur(1px) brightness(0.95);
+                transition: opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                will-change: opacity, filter;
+            }
+            .photo-reveal.is-revealed {
+                opacity: 1;
+                filter: saturate(1) contrast(1) blur(0) brightness(1);
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .photo-reveal {
+                    transition: none;
+                    opacity: 1;
+                    filter: saturate(1) contrast(1) blur(0) brightness(1);
+                }
+            }
+        
         body {
             opacity: 0;
             transition: opacity 0.4s ease-out;
@@ -92,15 +119,39 @@
                 const isLocal = url.protocol === 'file:' || url.origin === window.location.origin;
                 const isSamePage = url.pathname === window.location.pathname;
                 const hasHash = url.hash.length > 0;
-
-                if (isLocal && (!isSamePage || (!hasHash && url.href !== window.location.href))) {
+                
+                if (isLocal && !isSamePage) {
                     e.preventDefault();
                     document.body.classList.remove("page-loaded");
                     setTimeout(() => {
                         window.location.href = link.href;
                     }, 400);
+                } else if (isLocal && isSamePage && hasHash) {
+                    // Smooth scroll for anchor links
+                    e.preventDefault();
+                    const targetId = url.hash.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
                 }
-            } catch (err) {}
+            } catch (err) {
+                // Not a valid URL or other error, let browser handle normally
+            }
+        });
+
+        // Initialize scroll reveal
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-revealed");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll(".photo-reveal").forEach(el => observer.observe(el));
         });
     </script>
 </head>
@@ -178,7 +229,7 @@
       </script>
 
       <!-- Hero Section -->
-      <main class="grid md:grid-cols-2 gap-12 items-center mb-32 relative">
+      <main class="grid md:grid-cols-2 gap-12 items-center mb-32 relative photo-reveal">
           <!-- Left Column -->
           <div class="max-w-xl z-10">
               <div class="text-[10px] font-bold tracking-widest text-gray-500 mb-6 uppercase">A Virtual Photobooth</div>
@@ -247,7 +298,7 @@
 </div>
 
       <!-- Second Section -->
-      <section id="how-it-works" class="text-center mb-24 max-w-5xl mx-auto">
+      <section id="how-it-works" class="text-center mb-24 max-w-5xl mx-auto photo-reveal">
           <h2 class="text-3xl md:text-[32px] font-bold mb-16 text-gray-800">
               Developing your <span class="font-serif-italic text-[36px] text-red-500">memories</span>
           </h2>

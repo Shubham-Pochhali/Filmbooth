@@ -42,10 +42,43 @@
             text-orientation: mixed;
             transform: rotate(180deg);
         }
+
+        /* Photographic Developing Scroll Reveal */
+        .photo-reveal {
+            opacity: 0;
+            filter: saturate(0.85) contrast(0.9) blur(1px) brightness(0.95);
+            transition: opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: opacity, filter;
+        }
+        .photo-reveal.is-revealed {
+            opacity: 1;
+            filter: saturate(1) contrast(1) blur(0) brightness(1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .photo-reveal {
+                transition: none;
+                opacity: 1;
+                filter: saturate(1) contrast(1) blur(0) brightness(1);
+            }
+        }
     </style>
     <script>
         window.addEventListener("pageshow", () => {
             document.body.classList.add("page-loaded");
+        });
+
+        // Initialize scroll reveal
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-revealed");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll(".photo-reveal").forEach(el => observer.observe(el));
         });
     </script>
 </head>
@@ -122,7 +155,7 @@
         </script>
 
         <!-- Main Content -->
-        <main class="max-w-5xl mx-auto flex flex-col items-center">
+        <main class="max-w-5xl mx-auto flex flex-col items-center photo-reveal">
             
             <!-- Hero Grid -->
             <div class="grid md:grid-cols-[1fr_420px] gap-12 lg:gap-24 w-full mb-20 items-start">
@@ -164,7 +197,7 @@
             </div>
 
             <!-- Features Grid -->
-            <div class="grid md:grid-cols-2 gap-8 w-full mb-12">
+            <div class="grid md:grid-cols-2 gap-8 w-full mb-12 photo-reveal">
                 <!-- Tactile Design Card -->
                 <div class="w-full bg-[#f0eee9] p-10 border border-gray-200/60 shadow-sm relative overflow-hidden group">
                     <svg class="w-6 h-6 text-red-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
@@ -185,7 +218,7 @@
             </div>
 
             <!-- Credits Box -->
-            <div class="w-full bg-[#eae8e3] py-14 px-10 mb-20 relative shadow-sm max-w-[800px] mx-auto border-t-[2px] border-b-[2px] border-gray-300">
+            <div class="w-full bg-[#eae8e3] py-14 px-10 mb-20 relative shadow-sm max-w-[800px] mx-auto border-t-[2px] border-b-[2px] border-gray-300 photo-reveal">
                 <div class="absolute top-0 left-8 w-[40px] h-[2px] bg-red-600 transform -translate-y-[2px]"></div>
                 <div class="absolute bottom-0 right-8 w-[40px] h-[2px] bg-red-600 transform translate-y-[2px]"></div>
                 
