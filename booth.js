@@ -36,6 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let capturedImages = [];
     let finalStripUrl = null;
     let selectedFilmStock = 'bw';
+    let globalAudioCtx = null;
+    let isFirstCapture = true;
+
+    function initAudioContext() {
+        if (!globalAudioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                globalAudioCtx = new AudioContext();
+            }
+        }
+        if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+            globalAudioCtx.resume();
+        }
+    }
 
     const FILMS = {
         bw: {
@@ -78,6 +92,19 @@ document.addEventListener('DOMContentLoaded', () => {
         viewSetup.classList.add('hidden');
         viewStudio.classList.remove('hidden');
         
+        initAudioContext();
+
+        if (isFirstCapture) {
+            startBtn.classList.remove('animate-pulse-once');
+            void startBtn.offsetWidth;
+            startBtn.classList.add('animate-pulse-once');
+            
+            const helper = document.getElementById('onboarding-helper');
+            if (helper) {
+                helper.style.opacity = '1';
+            }
+        }
+
         await initCamera();
         
         if(loader) {
@@ -124,159 +151,144 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function playBeepSound() {
+        if (!globalAudioCtx) return;
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const actx = new AudioContext();
-            const osc = actx.createOscillator();
-            const gainNode = actx.createGain();
+            const osc = globalAudioCtx.createOscillator();
+            const gainNode = globalAudioCtx.createGain();
             
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, actx.currentTime);
+            osc.frequency.setValueAtTime(800, globalAudioCtx.currentTime);
             
-            gainNode.gain.setValueAtTime(0, actx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.1, actx.currentTime + 0.05);
-            gainNode.gain.linearRampToValueAtTime(0, actx.currentTime + 0.15);
+            gainNode.gain.setValueAtTime(0, globalAudioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, globalAudioCtx.currentTime + 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, globalAudioCtx.currentTime + 0.15);
             
             osc.connect(gainNode);
-            gainNode.connect(actx.destination);
+            gainNode.connect(globalAudioCtx.destination);
             
-            osc.start(actx.currentTime);
-            osc.stop(actx.currentTime + 0.2);
-            
-            setTimeout(() => { actx.close(); }, 300);
+            osc.start(globalAudioCtx.currentTime);
+            osc.stop(globalAudioCtx.currentTime + 0.2);
         } catch(e) {}
     }
 
     function playShutterSound() {
+        if (!globalAudioCtx) return;
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const actx = new AudioContext();
-            
-            const bufferSize = actx.sampleRate * 0.1;
-            const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+            const bufferSize = globalAudioCtx.sampleRate * 0.1;
+            const buffer = globalAudioCtx.createBuffer(1, bufferSize, globalAudioCtx.sampleRate);
             const data = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
             
-            const noise = actx.createBufferSource();
+            const noise = globalAudioCtx.createBufferSource();
             noise.buffer = buffer;
-            const noiseFilter = actx.createBiquadFilter();
+            const noiseFilter = globalAudioCtx.createBiquadFilter();
             noiseFilter.type = 'highpass';
             noiseFilter.frequency.value = 1000;
-            const gainNode = actx.createGain();
+            const gainNode = globalAudioCtx.createGain();
             noise.connect(noiseFilter);
             noiseFilter.connect(gainNode);
-            gainNode.connect(actx.destination);
-            gainNode.gain.setValueAtTime(1, actx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.1);
+            gainNode.connect(globalAudioCtx.destination);
+            gainNode.gain.setValueAtTime(1, globalAudioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, globalAudioCtx.currentTime + 0.1);
             
-            const osc = actx.createOscillator();
+            const osc = globalAudioCtx.createOscillator();
             osc.type = 'square';
-            osc.frequency.setValueAtTime(150, actx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(40, actx.currentTime + 0.05);
-            const oscGain = actx.createGain();
+            osc.frequency.setValueAtTime(150, globalAudioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, globalAudioCtx.currentTime + 0.05);
+            const oscGain = globalAudioCtx.createGain();
             osc.connect(oscGain);
-            oscGain.connect(actx.destination);
-            oscGain.gain.setValueAtTime(0.5, actx.currentTime);
-            oscGain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + 0.05);
+            oscGain.connect(globalAudioCtx.destination);
+            oscGain.gain.setValueAtTime(0.5, globalAudioCtx.currentTime);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, globalAudioCtx.currentTime + 0.05);
             
-            noise.start(actx.currentTime);
-            osc.start(actx.currentTime);
+            noise.start(globalAudioCtx.currentTime);
+            osc.start(globalAudioCtx.currentTime);
             
-            setTimeout(() => { noise.stop(); osc.stop(); actx.close(); }, 150);
+            setTimeout(() => { noise.stop(); osc.stop(); }, 150);
         } catch(e) {}
     }
 
     function playPrintingSound() {
+        if (!globalAudioCtx) return;
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const actx = new AudioContext();
-            
             const duration = 6.0; 
             
-            const osc = actx.createOscillator();
+            const osc = globalAudioCtx.createOscillator();
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(60, actx.currentTime);
+            osc.frequency.setValueAtTime(60, globalAudioCtx.currentTime);
             
             for(let i=0; i<60; i++) {
-                osc.frequency.linearRampToValueAtTime(60 + (i%2===0?5:0), actx.currentTime + (i*0.1));
+                osc.frequency.linearRampToValueAtTime(60 + (i%2===0?5:0), globalAudioCtx.currentTime + (i*0.1));
             }
             
-            const oscGain = actx.createGain();
-            oscGain.gain.setValueAtTime(0.3, actx.currentTime);
-            oscGain.gain.linearRampToValueAtTime(0.6, actx.currentTime + duration/2);
-            oscGain.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
+            const oscGain = globalAudioCtx.createGain();
+            oscGain.gain.setValueAtTime(0.3, globalAudioCtx.currentTime);
+            oscGain.gain.linearRampToValueAtTime(0.6, globalAudioCtx.currentTime + duration/2);
+            oscGain.gain.linearRampToValueAtTime(0, globalAudioCtx.currentTime + duration);
             
             osc.connect(oscGain);
-            oscGain.connect(actx.destination);
-            osc.start(actx.currentTime);
-            osc.stop(actx.currentTime + duration);
+            oscGain.connect(globalAudioCtx.destination);
+            osc.start(globalAudioCtx.currentTime);
+            osc.stop(globalAudioCtx.currentTime + duration);
 
-            const bufferSize = actx.sampleRate * duration;
-            const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+            const bufferSize = globalAudioCtx.sampleRate * duration;
+            const buffer = globalAudioCtx.createBuffer(1, bufferSize, globalAudioCtx.sampleRate);
             const data = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
             
-            const noise = actx.createBufferSource();
+            const noise = globalAudioCtx.createBufferSource();
             noise.buffer = buffer;
             
-            const noiseFilter = actx.createBiquadFilter();
+            const noiseFilter = globalAudioCtx.createBiquadFilter();
             noiseFilter.type = 'lowpass';
             noiseFilter.frequency.value = 800;
 
-            const noiseGain = actx.createGain();
-            noiseGain.gain.setValueAtTime(0, actx.currentTime);
-            noiseGain.gain.linearRampToValueAtTime(0.15, actx.currentTime + 0.5);
-            noiseGain.gain.linearRampToValueAtTime(0.15, actx.currentTime + duration - 0.5);
-            noiseGain.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
+            const noiseGain = globalAudioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0, globalAudioCtx.currentTime);
+            noiseGain.gain.linearRampToValueAtTime(0.15, globalAudioCtx.currentTime + 0.5);
+            noiseGain.gain.linearRampToValueAtTime(0.15, globalAudioCtx.currentTime + duration - 0.5);
+            noiseGain.gain.linearRampToValueAtTime(0, globalAudioCtx.currentTime + duration);
 
             noise.connect(noiseFilter);
             noiseFilter.connect(noiseGain);
-            noiseGain.connect(actx.destination);
+            noiseGain.connect(globalAudioCtx.destination);
             
-            noise.start(actx.currentTime);
-            
-            setTimeout(() => { actx.close(); }, duration * 1000 + 100);
+            noise.start(globalAudioCtx.currentTime);
         } catch(e){}
     }
 
     function playChemicalSwish() {
+        if (!globalAudioCtx) return;
         try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const actx = new AudioContext();
             const duration = 2.0;
             
-            const bufferSize = actx.sampleRate * duration;
-            const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+            const bufferSize = globalAudioCtx.sampleRate * duration;
+            const buffer = globalAudioCtx.createBuffer(1, bufferSize, globalAudioCtx.sampleRate);
             const data = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
             
-            const noise = actx.createBufferSource();
+            const noise = globalAudioCtx.createBufferSource();
             noise.buffer = buffer;
-            const noiseFilter = actx.createBiquadFilter();
+            const noiseFilter = globalAudioCtx.createBiquadFilter();
             noiseFilter.type = 'lowpass';
             
             // Sweep filter frequency to sound like liquid swishing
-            noiseFilter.frequency.setValueAtTime(200, actx.currentTime);
-            noiseFilter.frequency.exponentialRampToValueAtTime(800, actx.currentTime + duration / 2);
-            noiseFilter.frequency.exponentialRampToValueAtTime(200, actx.currentTime + duration);
+            noiseFilter.frequency.setValueAtTime(200, globalAudioCtx.currentTime);
+            noiseFilter.frequency.exponentialRampToValueAtTime(800, globalAudioCtx.currentTime + duration / 2);
+            noiseFilter.frequency.exponentialRampToValueAtTime(200, globalAudioCtx.currentTime + duration);
             
-            const gainNode = actx.createGain();
+            const gainNode = globalAudioCtx.createGain();
             noise.connect(noiseFilter);
             noiseFilter.connect(gainNode);
-            gainNode.connect(actx.destination);
+            gainNode.connect(globalAudioCtx.destination);
             
             // Slow fade in and out for the liquid sound
-            gainNode.gain.setValueAtTime(0, actx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.3, actx.currentTime + duration / 4);
-            gainNode.gain.linearRampToValueAtTime(0.3, actx.currentTime + duration * 0.75);
-            gainNode.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
+            gainNode.gain.setValueAtTime(0, globalAudioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, globalAudioCtx.currentTime + duration / 4);
+            gainNode.gain.linearRampToValueAtTime(0.3, globalAudioCtx.currentTime + duration * 0.75);
+            gainNode.gain.linearRampToValueAtTime(0, globalAudioCtx.currentTime + duration);
             
-            noise.start(actx.currentTime);
-            setTimeout(() => { actx.close(); }, duration * 1000 + 100);
+            noise.start(globalAudioCtx.currentTime);
         } catch(e) {}
     }
 
@@ -392,9 +404,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     startBtn.addEventListener('click', async () => {
+        initAudioContext();
+        
         if (!stream) {
             alert("Please enable camera access first.");
             return;
+        }
+
+        if (isFirstCapture) {
+            isFirstCapture = false;
+            const helper = document.getElementById('onboarding-helper');
+            if (helper) {
+                helper.style.opacity = '0';
+            }
+            startBtn.classList.remove('animate-pulse-once');
         }
 
         startBtn.disabled = true;
