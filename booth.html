@@ -90,13 +90,37 @@
             top: 0;
             width: 50vw;
             height: 100dvh;
-            background-color: #0f0f0f;
+            background-color: #050505;
+            background-image: 
+                linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.9) 100%),
+                repeating-linear-gradient(
+                    to right,
+                    #020202 0%,
+                    #0a0a0a 4%,
+                    #1c1c1c 8%,
+                    #0a0a0a 12%,
+                    #020202 16%
+                );
+            background-size: 100% 100%, 25vw 100%;
             z-index: 100;
             pointer-events: none;
             transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        #curtain-left { left: 0; transform: translateX(-100%); border-right: 1px solid #222; }
-        #curtain-right { right: 0; transform: translateX(100%); border-left: 1px solid #222; }
+        
+        /* Drop shadows for realism when closed/opening */
+        #curtain-left { 
+            left: 0; 
+            transform: translateX(-100%); 
+            border-right: 2px solid #222;
+            box-shadow: inset -20px 0 40px rgba(0,0,0,0.9), 10px 0 30px rgba(0,0,0,0.8);
+        }
+        #curtain-right { 
+            right: 0; 
+            transform: translateX(100%); 
+            border-left: 2px solid #222;
+            box-shadow: inset 20px 0 40px rgba(0,0,0,0.9), -10px 0 30px rgba(0,0,0,0.8);
+            background-position: top left, 12.5vw top; /* offset folds so they match in middle */
+        }
 
         .curtain.closed { transform: translateX(0) !important; }
         

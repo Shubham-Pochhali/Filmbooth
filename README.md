@@ -29,7 +29,7 @@ We built this to bring the nostalgia of physical photobooths to the internet—w
 
 ## 🛠️ Built With
 
-- **HTML5 & CSS3 **
+- **HTML5 & CSS3**
 - **Vanilla JavaScript** (Canvas API, MediaDevices API)
 - **Tailwind CSS** (for utility-first styling)
 
