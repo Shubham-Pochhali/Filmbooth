@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = captureCanvas.getContext('2d');
     
     // View Elements
+    const viewFormat = document.getElementById('view-format');
     const viewSetup = document.getElementById('view-setup');
     const viewStudio = document.getElementById('view-studio');
     const viewPrint = document.getElementById('view-print');
@@ -37,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let finalStripUrl = null;
     let selectedFilmStock = 'bw';
     let globalAudioCtx = null;
+    let selectedLayout = 4;
+    let selectedPaperColor = '#ffffff';
+    let selectedPaperTextColor = '#111111';
+    let selectedInkColor = '#111111';
 
     function initAudioContext() {
         if (!globalAudioCtx) {
@@ -58,14 +63,51 @@ document.addEventListener('DOMContentLoaded', () => {
             tint: 'NEUTRAL'
         },
         color: {
-            filter: 'contrast(110%) saturate(120%) sepia(20%)',
-            label: 'PORTRA_400',
-            overlayMode: 'FILM: KODAK PORTRA',
+            filter: 'sepia(30%) contrast(110%) saturate(120%)',
+            label: 'EXP_PORTRA',
+            overlayMode: 'FILM: PORTRA 400',
             tint: 'WARM'
         }
     };
 
-    // Film Selection Logic
+    // --- Configuration Step 1: Format & Paper ---
+    const formatCards = document.querySelectorAll('.format-card');
+    formatCards.forEach(card => {
+        card.addEventListener('click', () => {
+            formatCards.forEach(c => c.classList.replace('border-black', 'border-gray-200'));
+            card.classList.replace('border-gray-200', 'border-black');
+            selectedLayout = parseInt(card.dataset.layout);
+        });
+    });
+
+    const paperCards = document.querySelectorAll('.paper-card');
+    paperCards.forEach(card => {
+        card.addEventListener('click', () => {
+            paperCards.forEach(c => c.classList.replace('border-black', 'border-gray-200'));
+            card.classList.replace('border-gray-200', 'border-black');
+            selectedPaperColor = card.dataset.color;
+            selectedPaperTextColor = card.dataset.text;
+        });
+    });
+
+    const inkBtns = document.querySelectorAll('.ink-color-btn');
+    inkBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            inkBtns.forEach(b => b.classList.remove('ring-2', 'ring-red-500', 'ring-offset-1'));
+            btn.classList.add('ring-2', 'ring-red-500', 'ring-offset-1');
+            selectedInkColor = btn.dataset.ink;
+            const input = document.getElementById('caption-input');
+            input.style.color = selectedInkColor;
+            input.classList.remove('text-gray-800');
+        });
+    });
+
+    document.getElementById('confirm-format-btn').addEventListener('click', () => {
+        viewFormat.classList.add('hidden');
+        viewSetup.classList.remove('hidden');
+    });
+
+    // --- Configuration Step 2: Film Selection ---
     async function selectFilm(stock) {
         selectedFilmStock = stock;
         const film = FILMS[stock];
@@ -333,10 +375,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const bottomPadding = 400;
         
         stripCanvas.width = imgWidth + (padding * 2);
-        stripCanvas.height = topPadding + (imgHeight * 4) + (spacing * 4) + bottomPadding;
+        stripCanvas.height = topPadding + (imgHeight * selectedLayout) + (spacing * selectedLayout) + bottomPadding;
         
         // Background
-        sCtx.fillStyle = '#ffffff';
+        sCtx.fillStyle = selectedPaperColor;
         sCtx.fillRect(0, 0, stripCanvas.width, stripCanvas.height);
         
         const loadImg = (src) => new Promise((resolve) => {
@@ -379,16 +421,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const footerY = stripCanvas.height - bottomPadding + 100;
         
         sCtx.textAlign = 'center';
-        sCtx.fillStyle = '#888';
+        sCtx.fillStyle = selectedPaperTextColor === '#ffffff' ? '#aaaaaa' : '#888888';
         sCtx.font = '26px "Space Mono", monospace';
         sCtx.fillText('ARCHIVE ID: 9021-X-44', stripCanvas.width / 2, footerY);
         
-        sCtx.fillStyle = '#111';
+        sCtx.fillStyle = selectedPaperTextColor;
         sCtx.font = 'italic 72px "Playfair Display", serif';
         sCtx.fillText('Filmbooth', stripCanvas.width / 2, footerY + 80);
 
         if (userCaption && userCaption.trim() !== '') {
-            sCtx.fillStyle = '#0f172a';
+            sCtx.fillStyle = selectedInkColor;
             sCtx.font = '600 56px "Caveat", cursive';
             sCtx.save();
             sCtx.translate(stripCanvas.width / 2, footerY + 200);
@@ -435,10 +477,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         await showPrompt("Get ready...", 1500);
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < selectedLayout; i++) {
             // Update UI Counters
             const frameNum = (i + 1).toString().padStart(2, '0');
-            expCounter.innerText = `EXP ${frameNum}/04`;
+            expCounter.innerText = `EXP ${frameNum}/0${selectedLayout}`;
             frameCurrent.innerText = frameNum;
 
             if(promptText) {
@@ -582,12 +624,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (captionInput) captionInput.value = '';
         
         viewPrint.classList.add('hidden');
-        viewSetup.classList.remove('hidden'); // Go back to setup instead of studio
+        viewFormat.classList.remove('hidden'); // Go back to format step
         
         startBtn.disabled = false;
         startBtn.innerHTML = `WIND & SHOOT <span class="w-4 h-4 rounded-full bg-[#c83232] shadow-inner ml-2"></span>`;
         statusText.innerText = 'OPTICAL VIEWFINDER';
-        expCounter.innerText = 'EXP 01/04';
+        expCounter.innerText = `EXP 01/0${selectedLayout}`;
         frameCurrent.innerText = '01';
 
         if(loader) {

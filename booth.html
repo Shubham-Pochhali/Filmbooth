@@ -140,8 +140,102 @@
       <div id="curtain-left" class="curtain"></div>
       <div id="curtain-right" class="curtain"></div>
 
-      <!-- View 0: Setup -->
-      <main id="view-setup" class="flex flex-col items-center flex-grow mb-16 w-full max-w-4xl mx-auto mt-10">
+      <!-- View 0.1: Format & Paper Color -->
+      <main id="view-format" class="flex flex-col items-center flex-grow mb-16 w-full max-w-5xl mx-auto mt-10">
+          <div class="w-full mb-12">
+              <h1 class="text-4xl font-bold font-serif mb-2 uppercase tracking-wide">Select_Format</h1>
+              <p class="text-gray-500 text-[10px] font-mono tracking-widest uppercase">Choose your archival strip configuration.</p>
+          </div>
+          
+          <div class="grid md:grid-cols-3 gap-6 w-full mb-16">
+              <!-- 2x1 COUPLE -->
+              <button class="format-card group text-left bg-white border-2 border-gray-200 p-8 hover:border-black transition-colors relative btn-mech" data-layout="2">
+                  <div class="text-[9px] font-mono text-gray-400 tracking-widest uppercase mb-4">FORMAT_ID: SN-204-CP</div>
+                  <h2 class="text-2xl font-serif font-bold mb-4">2x1 COUPLE</h2>
+                  <p class="font-serif-italic text-gray-600 text-sm leading-relaxed mb-12">"The Duo." A compact, intimate strip.</p>
+                  <div class="flex justify-between items-end border-t border-gray-100 pt-4 mt-auto">
+                      <div>
+                          <div class="text-[7px] text-gray-400 uppercase tracking-widest mb-1">EXPOSURES</div>
+                          <div class="font-bold text-xs">02</div>
+                      </div>
+                      <div>
+                          <div class="text-[7px] text-gray-400 uppercase tracking-widest mb-1">DIMENSIONS</div>
+                          <div class="font-bold text-xs">2" x 4"</div>
+                      </div>
+                  </div>
+              </button>
+
+              <!-- 3x1 MODERN -->
+              <button class="format-card group text-left bg-white border-2 border-gray-200 p-8 hover:border-black transition-colors relative btn-mech" data-layout="3">
+                  <div class="text-[9px] font-mono text-gray-400 tracking-widest uppercase mb-4">FORMAT_ID: SN-309-MD</div>
+                  <h2 class="text-2xl font-serif font-bold mb-4">3x1 MODERN</h2>
+                  <p class="font-serif-italic text-gray-600 text-sm leading-relaxed mb-12">"The Contemporary." A balanced, versatile layout.</p>
+                  <div class="flex justify-between items-end border-t border-gray-100 pt-4 mt-auto">
+                      <div>
+                          <div class="text-[7px] text-gray-400 uppercase tracking-widest mb-1">EXPOSURES</div>
+                          <div class="font-bold text-xs">03</div>
+                      </div>
+                      <div>
+                          <div class="text-[7px] text-gray-400 uppercase tracking-widest mb-1">DIMENSIONS</div>
+                          <div class="font-bold text-xs">2" x 6"</div>
+                      </div>
+                  </div>
+              </button>
+
+              <!-- 4x1 CLASSIC (Default) -->
+              <button class="format-card group text-left bg-white border-2 border-black p-8 transition-colors relative btn-mech" data-layout="4">
+                  <div class="absolute top-6 right-6 border border-red-600 text-red-600 text-[8px] font-bold tracking-widest px-1 py-0.5 transform rotate-12">MASTER</div>
+                  <div class="text-[9px] font-mono text-gray-400 tracking-widest uppercase mb-4">FORMAT_ID: SN-412-CL</div>
+                  <h2 class="text-2xl font-serif font-bold mb-4">4x1 CLASSIC</h2>
+                  <p class="font-serif-italic text-gray-600 text-sm leading-relaxed mb-12">"The Standard." The original vintage experience.</p>
+                  <div class="flex justify-between items-end border-t border-gray-100 pt-4 mt-auto">
+                      <div>
+                          <div class="text-[7px] text-gray-400 uppercase tracking-widest mb-1">EXPOSURES</div>
+                          <div class="font-bold text-xs">04</div>
+                      </div>
+                      <div>
+                          <div class="text-[7px] text-gray-400 uppercase tracking-widest mb-1">DIMENSIONS</div>
+                          <div class="font-bold text-xs">2" x 8"</div>
+                      </div>
+                  </div>
+              </button>
+          </div>
+
+          <div class="w-full mb-12">
+              <h1 class="text-4xl font-bold font-serif mb-2 uppercase tracking-wide">Paper_Stock</h1>
+              <p class="text-gray-500 text-[10px] font-mono tracking-widest uppercase">Select your strip background.</p>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-16">
+              <!-- Archival White (Default) -->
+              <button class="paper-card border-2 border-black bg-white flex flex-col items-center justify-center p-6 btn-mech" data-color="#ffffff" data-text="#111111">
+                  <div class="w-full h-16 bg-[#ffffff] border border-gray-200 mb-4 shadow-inner"></div>
+                  <span class="text-[9px] font-bold tracking-widest uppercase">Archival White</span>
+              </button>
+              <!-- Carbon Black -->
+              <button class="paper-card border-2 border-gray-200 bg-white flex flex-col items-center justify-center p-6 btn-mech hover:border-black transition-colors" data-color="#111111" data-text="#ffffff">
+                  <div class="w-full h-16 bg-[#111111] mb-4 shadow-inner"></div>
+                  <span class="text-[9px] font-bold tracking-widest uppercase">Carbon Black</span>
+              </button>
+              <!-- Warm Ivory -->
+              <button class="paper-card border-2 border-gray-200 bg-white flex flex-col items-center justify-center p-6 btn-mech hover:border-black transition-colors" data-color="#f5f0e6" data-text="#111111">
+                  <div class="w-full h-16 bg-[#f5f0e6] border border-gray-200 mb-4 shadow-inner"></div>
+                  <span class="text-[9px] font-bold tracking-widest uppercase">Warm Ivory</span>
+              </button>
+              <!-- Blossom Emulsion -->
+              <button class="paper-card border-2 border-gray-200 bg-white flex flex-col items-center justify-center p-6 btn-mech hover:border-black transition-colors" data-color="#fce7f3" data-text="#111111">
+                  <div class="w-full h-16 bg-[#fce7f3] border border-gray-200 mb-4 shadow-inner"></div>
+                  <span class="text-[9px] font-bold tracking-widest uppercase text-center">Blossom Emulsion</span>
+              </button>
+          </div>
+
+          <button id="confirm-format-btn" class="bg-gray-300 text-white py-5 px-16 text-xs font-bold tracking-[0.3em] uppercase hover:bg-black transition-colors btn-mech shadow-md w-full max-w-sm">
+              Confirm Selection
+          </button>
+      </main>
+
+      <!-- View 0.2: Setup -->
+      <main id="view-setup" class="hidden flex-col items-center flex-grow mb-16 w-full max-w-4xl mx-auto mt-10">
           <div class="text-center mb-16">
               <h1 class="text-5xl font-bold font-serif mb-4">Select Film Stock</h1>
               <p class="text-gray-500 text-[10px] font-mono tracking-widest uppercase">Select your archival process</p>
@@ -320,9 +414,15 @@
                   <img id="final-print-image" src="" alt="Photo Strip" class="w-full shadow-2xl">
                   
                   <!-- Caption Input Overlay -->
-                  <div id="caption-overlay" class="absolute bottom-16 left-1/2 -translate-x-1/2 w-3/4 bg-white/95 backdrop-blur shadow-2xl border border-gray-200 p-4 transition-all duration-500 opacity-0 pointer-events-none translate-y-4">
-                      <div class="text-[9px] font-mono text-gray-400 tracking-[0.2em] uppercase mb-2">Write a note</div>
-                      <input type="text" id="caption-input" maxlength="45" placeholder="e.g. Paris 2026..." class="w-full bg-transparent border-b border-gray-300 focus:border-red-500 outline-none font-['Caveat'] text-2xl text-gray-800 py-1 mb-4 placeholder:text-gray-300">
+                  <div id="caption-overlay" class="absolute bottom-16 left-1/2 -translate-x-1/2 w-3/4 bg-white/95 backdrop-blur shadow-2xl border border-gray-200 p-4 transition-all duration-500 opacity-0 pointer-events-none translate-y-4 z-50">
+                      <div class="flex justify-between items-end mb-2">
+                          <div class="text-[9px] font-mono text-gray-400 tracking-[0.2em] uppercase">Write a note</div>
+                          <div class="flex gap-2">
+                              <button class="ink-color-btn w-4 h-4 rounded-full bg-[#111111] border-2 border-gray-400 hover:scale-110 transition-transform" data-ink="#111111" title="Black Ink"></button>
+                              <button class="ink-color-btn w-4 h-4 rounded-full bg-[#ffffff] border-2 border-gray-200 hover:scale-110 transition-transform" data-ink="#ffffff" title="White Ink"></button>
+                          </div>
+                      </div>
+                      <input type="text" id="caption-input" maxlength="45" placeholder="e.g. Paris 2026..." class="w-full bg-gray-300 rounded-sm border-none outline-none focus:ring-2 focus:ring-black font-['Caveat'] text-2xl text-gray-800 py-2 px-3 mb-4 placeholder:text-gray-400">
                       <button id="submit-caption-btn" class="w-full bg-black text-white py-3 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-red-600 transition-colors btn-mech">
                           SIGN & PRINT
                       </button>
