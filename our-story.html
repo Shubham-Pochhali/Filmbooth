@@ -94,73 +94,7 @@
     
     <!-- Header -->
     <div class="w-full max-w-[1200px] mx-auto px-6 pt-10 pb-16">
-        <header class="flex justify-between items-center mb-16 md:mb-24 relative z-50">
-            <div class="flex items-center gap-2">
-                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <a href="index.html" class="font-bold tracking-[0.2em] text-lg hover:text-red-600 transition-colors text-gray-900">FILMBOOTH</a>
-            </div>
 
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex gap-10 text-[10px] font-bold tracking-widest text-gray-500 uppercase">
-                <a href="index.html" class="hover:text-red-500 transition-colors">Home</a>
-                <a href="how-it-works.html" class="hover:text-red-500 transition-colors">How it works</a>
-                <a href="our-story.html" class="text-red-500 border-b-[1.5px] border-red-500 pb-1">Our Story</a>
-                <a href="index.html#scrapbook" class="hover:text-red-500 transition-colors">Scrapbook</a>
-            </nav>
-
-            <!-- Mobile Hamburger -->
-            <button id="mobileMenuBtn" class="md:hidden text-gray-900 focus:outline-none z-50 relative">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </header>
-
-        <!-- Mobile Drawer Overlay -->
-        <div id="mobileDrawer" class="fixed inset-0 z-[60] hidden md:hidden">
-            <div id="drawerBackdrop" class="absolute inset-0 bg-black/10 backdrop-blur-sm transition-opacity opacity-0"></div>
-            <div id="drawerPane" class="absolute top-0 right-0 h-full w-[260px] bg-[#f4f4f2] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col px-12 pt-28">
-                <button id="closeMenuBtn" class="absolute top-10 right-6 text-gray-900 focus:outline-none p-2">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                <nav class="flex flex-col gap-10 text-left text-lg font-serif uppercase text-gray-800 tracking-wide">
-                    <a href="index.html" class="text-red-600 transition-colors">HOME</a>  
-                    <a href="index.html#scrapbook" class="hover:text-red-600 transition-colors">GALLERY</a>
-                  <a href="how-it-works.html" class="hover:text-red-600 transition-colors">GUIDE</a>
-                  <a href="our-story.html" class="hover:text-red-600 transition-colors">ABOUT</a>
-                </nav>
-            </div>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const openBtn = document.getElementById('mobileMenuBtn');
-                const closeBtn = document.getElementById('closeMenuBtn');
-                const drawer = document.getElementById('mobileDrawer');
-                const backdrop = document.getElementById('drawerBackdrop');
-                const pane = document.getElementById('drawerPane');
-                
-                if(openBtn && closeBtn && drawer) {
-                    openBtn.addEventListener('click', () => {
-                        drawer.classList.remove('hidden');
-                        setTimeout(() => {
-                            backdrop.classList.remove('opacity-0');
-                            pane.classList.remove('translate-x-full');
-                        }, 10);
-                        document.body.style.overflow = 'hidden';
-                    });
-                    closeBtn.addEventListener('click', () => {
-                        backdrop.classList.add('opacity-0');
-                        pane.classList.add('translate-x-full');
-                        setTimeout(() => {
-                            drawer.classList.add('hidden');
-                        }, 300);
-                        document.body.style.overflow = '';
-                    });
-                }
-            });
-        </script>
 
         <!-- Main Content -->
         <main class="max-w-5xl mx-auto flex flex-col items-center photo-reveal">
@@ -260,5 +194,6 @@
     </footer>
 
     <script src="cursor.js"></script>
+    <script src="navbar.js"></script>
 </body>
 </html>

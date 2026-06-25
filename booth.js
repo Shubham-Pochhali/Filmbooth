@@ -53,9 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Film Selection Logic
-    function selectFilm(stock) {
+    async function selectFilm(stock) {
         selectedFilmStock = stock;
         const film = FILMS[stock];
+        
+        const loader = document.getElementById('global-loader');
+        if(loader) {
+            const loaderText = loader.querySelector('.loader-text');
+            if(loaderText) loaderText.innerText = 'Calibrating Optics...';
+            loader.classList.remove('hidden');
+            if(typeof playSoftShutter === 'function') playSoftShutter();
+            await sleep(800);
+        }
         
         // Setup Studio UI
         overlayModeText.innerText = film.overlayMode;
@@ -69,7 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
         viewSetup.classList.add('hidden');
         viewStudio.classList.remove('hidden');
         
-        initCamera();
+        await initCamera();
+        
+        if(loader) {
+            loader.classList.add('hidden');
+            await sleep(400);
+            const loaderText = loader.querySelector('.loader-text');
+            if(loaderText) loaderText.innerText = 'Winding...';
+        }
     }
 
     stockBw.addEventListener('click', () => selectFilm('bw'));
@@ -224,6 +240,44 @@ document.addEventListener('DOMContentLoaded', () => {
             
             setTimeout(() => { actx.close(); }, duration * 1000 + 100);
         } catch(e){}
+    }
+
+    function playChemicalSwish() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const actx = new AudioContext();
+            const duration = 2.0;
+            
+            const bufferSize = actx.sampleRate * duration;
+            const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+            
+            const noise = actx.createBufferSource();
+            noise.buffer = buffer;
+            const noiseFilter = actx.createBiquadFilter();
+            noiseFilter.type = 'lowpass';
+            
+            // Sweep filter frequency to sound like liquid swishing
+            noiseFilter.frequency.setValueAtTime(200, actx.currentTime);
+            noiseFilter.frequency.exponentialRampToValueAtTime(800, actx.currentTime + duration / 2);
+            noiseFilter.frequency.exponentialRampToValueAtTime(200, actx.currentTime + duration);
+            
+            const gainNode = actx.createGain();
+            noise.connect(noiseFilter);
+            noiseFilter.connect(gainNode);
+            gainNode.connect(actx.destination);
+            
+            // Slow fade in and out for the liquid sound
+            gainNode.gain.setValueAtTime(0, actx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, actx.currentTime + duration / 4);
+            gainNode.gain.linearRampToValueAtTime(0.3, actx.currentTime + duration * 0.75);
+            gainNode.gain.linearRampToValueAtTime(0, actx.currentTime + duration);
+            
+            noise.start(actx.currentTime);
+            setTimeout(() => { actx.close(); }, duration * 1000 + 100);
+        } catch(e) {}
     }
 
     async function showPrompt(text, duration) {
@@ -381,9 +435,17 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (i < 3) await sleep(500);
         }
+        const loader = document.getElementById('global-loader');
+        if(loader) {
+            const loaderText = loader.querySelector('.loader-text');
+            if(loaderText) loaderText.innerText = 'Developing Film...';
+            loader.classList.remove('hidden');
+            playChemicalSwish();
+            await sleep(2000);
+        }
 
         // Switch Views and Theme
-        document.body.classList.remove('bg-zinc-950', 'text-white');
+        document.body.classList.remove('bg-zinc-950', 'text-white', 'bg-[#232121]');
         document.body.classList.add('bg-[#fafafa]', 'text-gray-900');
         
         viewStudio.classList.add('hidden');
@@ -395,6 +457,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Generate strip
         finalStripUrl = await generateStrip(capturedImages);
+        
+        if(loader) {
+            loader.classList.add('hidden');
+            await sleep(400);
+            const loaderText = loader.querySelector('.loader-text');
+            if(loaderText) loaderText.innerText = 'Winding...';
+        }
         
         finalPrintImage.onload = () => {
             finalPrintImage.classList.add('printing-animation');
@@ -415,8 +484,16 @@ document.addEventListener('DOMContentLoaded', () => {
     shareBtn.addEventListener('click', () => {
         alert("Your strip is ready to be shared! Download it and add it to your Instagram story.");
     });
+    startOverBtn.addEventListener('click', async () => {
+        const loader = document.getElementById('global-loader');
+        if(loader) {
+            const loaderText = loader.querySelector('.loader-text');
+            if(loaderText) loaderText.innerText = 'Rewinding...';
+            loader.classList.remove('hidden');
+            if(typeof playSoftShutter === 'function') playSoftShutter();
+            await sleep(800);
+        }
 
-    startOverBtn.addEventListener('click', () => {
         // Ensure Light Theme
         document.body.classList.remove('bg-[#232121]', 'text-white');
         document.body.classList.add('bg-[#fafafa]', 'text-gray-900');
@@ -433,5 +510,12 @@ document.addEventListener('DOMContentLoaded', () => {
         statusText.innerText = 'OPTICAL VIEWFINDER';
         expCounter.innerText = 'EXP 01/04';
         frameCurrent.innerText = '01';
+
+        if(loader) {
+            loader.classList.add('hidden');
+            await sleep(400);
+            const loaderText = loader.querySelector('.loader-text');
+            if(loaderText) loaderText.innerText = 'Winding...';
+        }
     });
 });
