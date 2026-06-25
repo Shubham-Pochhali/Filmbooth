@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Header HTML
     const headerHTML = `
-      <div class="w-full max-w-6xl px-6 pt-10 mx-auto">
+      <div id="global-nav-container" class="w-full max-w-6xl px-6 pt-10 mx-auto transition-opacity duration-300">
           <header class="flex justify-between items-center mb-10 md:mb-16 relative z-50 flex-shrink-0">
               <div class="flex items-center gap-2">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

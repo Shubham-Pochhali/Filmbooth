@@ -78,19 +78,27 @@
                 animation: blink 2s ease-in-out infinite;
             }
 
-            /* Photographic Developing Scroll Reveal */
-            .photo-reveal {
+            /* Editorial Photographic Scroll Reveal */
+            .reveal-group .reveal-1,
+            .reveal-group .reveal-2,
+            .reveal-group .reveal-3,
+            .reveal-group .reveal-4 {
                 opacity: 0;
                 filter: saturate(0.85) contrast(0.9) blur(1px) brightness(0.95);
                 transition: opacity 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
                 will-change: opacity, filter;
             }
-            .photo-reveal.is-revealed {
-                opacity: 1;
-                filter: saturate(1) contrast(1) blur(0) brightness(1);
-            }
+
+            .reveal-group.is-revealed .reveal-1 { transition-delay: 0ms; opacity: 1; filter: saturate(1) contrast(1) blur(0) brightness(1); }
+            .reveal-group.is-revealed .reveal-2 { transition-delay: 200ms; opacity: 1; filter: saturate(1) contrast(1) blur(0) brightness(1); }
+            .reveal-group.is-revealed .reveal-3 { transition-delay: 400ms; opacity: 1; filter: saturate(1) contrast(1) blur(0) brightness(1); }
+            .reveal-group.is-revealed .reveal-4 { transition-delay: 600ms; opacity: 1; filter: saturate(1) contrast(1) blur(0) brightness(1); }
+
             @media (prefers-reduced-motion: reduce) {
-                .photo-reveal {
+                .reveal-group .reveal-1,
+                .reveal-group .reveal-2,
+                .reveal-group .reveal-3,
+                .reveal-group .reveal-4 {
                     transition: none;
                     opacity: 1;
                     filter: saturate(1) contrast(1) blur(0) brightness(1);
@@ -116,18 +124,36 @@
         
     </style>
     <script>
-        // Initialize scroll reveal
+        // Editorial Animation Queue
         document.addEventListener("DOMContentLoaded", () => {
+            let isRevealing = false;
+            let revealQueue = [];
+
+            function processRevealQueue() {
+                if (isRevealing || revealQueue.length === 0) return;
+                isRevealing = true;
+                const target = revealQueue.shift();
+                target.classList.add("is-revealed");
+                
+                // Wait 800ms before allowing the next major section to animate
+                // This guarantees "Never animate two major sections simultaneously"
+                setTimeout(() => {
+                    isRevealing = false;
+                    processRevealQueue();
+                }, 800);
+            }
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add("is-revealed");
+                        revealQueue.push(entry.target);
                         observer.unobserve(entry.target);
+                        processRevealQueue();
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.15 });
 
-            document.querySelectorAll(".photo-reveal").forEach(el => observer.observe(el));
+            document.querySelectorAll(".reveal-group").forEach(el => observer.observe(el));
         });
     </script>
 </head>
@@ -136,18 +162,18 @@
       
 
       <!-- Hero Section -->
-      <main class="grid md:grid-cols-2 gap-12 items-center mb-32 relative photo-reveal">
+      <main class="grid md:grid-cols-2 gap-12 items-center mb-32 relative reveal-group">
           <!-- Left Column -->
           <div class="max-w-xl z-10">
-              <div class="text-[10px] font-bold tracking-widest text-gray-500 mb-6 uppercase">A Virtual Photobooth</div>
-              <h1 class="text-5xl md:text-[64px] font-bold leading-tight mb-6">
+              <div class="text-[10px] font-bold tracking-widest text-gray-500 mb-6 uppercase reveal-1">A Virtual Photobooth</div>
+              <h1 class="text-5xl md:text-[64px] font-bold leading-tight mb-6 reveal-1">
                   The <span class="font-serif-italic font-semibold text-red-500 text-5xl md:text-[72px]">aesthetic</span><br> web photobooth.
               </h1>
-              <p class="text-gray-600 text-lg mb-10 leading-relaxed pr-8 max-w-md">
+              <p class="text-gray-600 text-lg mb-10 leading-relaxed pr-8 max-w-md reveal-2">
                   Step inside the internet's cutest photobooth. Snap pics with your webcam, apply vintage film filters, and print gorgeous Y2K photo strips instantly.
               </p>
               
-              <div class="flex items-center gap-8 mb-12">
+              <div class="flex items-center gap-8 mb-12 reveal-3">
                   <a href="booth.html" class="bg-[#111] text-white px-8 py-4 font-bold text-[11px] tracking-widest hover:bg-red-500 transition-colors btn-mech">START THE BOOTH</a>
                   <a href="how-it-works.html" class="font-bold text-[11px] tracking-widest uppercase hover:underline flex items-center gap-2">
                     SEE HOW IT WORKS
@@ -155,14 +181,14 @@
               </div>
               
               <!-- Users online badge -->
-              <div class="inline-flex items-center gap-2 bg-gray-100/80 px-4 py-2.5 text-[10px] font-bold tracking-widest text-gray-500 rounded-sm">
+              <div class="inline-flex items-center gap-2 bg-gray-100/80 px-4 py-2.5 text-[10px] font-bold tracking-widest text-gray-500 rounded-sm reveal-3">
                   <svg class="w-3.5 h-3.5 text-red-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                   1,247 USERS ONLINE NOW
               </div>
           </div>
 
           <!-- Right Column -->
-          <div class="relative flex justify-center lg:justify-end pr-8">
+          <div class="relative flex justify-center lg:justify-end pr-8 reveal-4">
               <div class="relative bg-white p-4 pb-16 shadow-xl transform rotate-2 max-w-sm border border-gray-100">
                   <!-- Tape effect -->
                   <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-8 tape transform -rotate-1 bg-white/60"></div>
@@ -205,12 +231,12 @@
 </div>
 
       <!-- Second Section -->
-      <section id="how-it-works" class="text-center mb-24 max-w-5xl mx-auto photo-reveal">
-          <h2 class="text-3xl md:text-[32px] font-bold mb-16 text-gray-800">
+      <section id="how-it-works" class="text-center mb-24 max-w-5xl mx-auto reveal-group">
+          <h2 class="text-3xl md:text-[32px] font-bold mb-16 text-gray-800 reveal-1">
               Developing your <span class="font-serif-italic text-[36px] text-red-500">memories</span>
           </h2>
           
-          <div class="grid md:grid-cols-3 gap-8 text-left">
+          <div class="grid md:grid-cols-3 gap-8 text-left reveal-4">
               <!-- Card 1 -->
               <div class="bg-gray-100/60 p-10 hover:bg-gray-100 transition-colors">
                   <div class="w-12 h-12 mb-8 bg-white flex items-center justify-center shadow-sm">
@@ -254,15 +280,15 @@
           </div>
       </section>
       <!-- Community Scrapbook Section -->
-      <section id="scrapbook"class="text-center mb-32 max-w-5xl mx-auto">
-          <h2 class="text-3xl md:text-[32px] font-bold mb-4 text-gray-800">
+      <section id="scrapbook" class="text-center mb-32 max-w-5xl mx-auto reveal-group">
+          <h2 class="text-3xl md:text-[32px] font-bold mb-4 text-gray-800 reveal-1">
               Community <span class="font-serif-italic text-[36px] text-red-500">Scrapbook</span>
           </h2>
-          <p class="text-gray-500 text-[13px] mb-12 tracking-wide">
+          <p class="text-gray-500 text-[13px] mb-12 tracking-wide reveal-2">
               Real photos from real people — taken right here in the booth.
           </p>
 
-          <div class="bg-[#2a2a2a] rounded-lg p-12 relative shadow-2xl overflow-hidden">
+          <div class="bg-[#2a2a2a] rounded-lg p-12 relative shadow-2xl overflow-hidden reveal-4">
               <!-- Photos -->
               <div class="flex flex-wrap justify-center items-center gap-6 mb-16 px-4">
                   <!-- Photo 1 -->
@@ -298,11 +324,11 @@
       </section>
 
       <!-- SEO / Info Section -->
-      <section class="max-w-4xl mx-auto mb-32 px-4">
-          <h2 class="text-2xl font-serif-italic font-bold text-center text-gray-800 mb-8">
+      <section class="max-w-4xl mx-auto mb-32 px-4 reveal-group">
+          <h2 class="text-2xl font-serif-italic font-bold text-center text-gray-800 mb-8 reveal-1">
               The Best Free Online Photobooth for Aesthetic Edits
           </h2>
-          <div class="text-[13px] text-gray-600 space-y-6 mb-16 leading-relaxed text-center md:text-left max-w-3xl mx-auto">
+          <div class="text-[13px] text-gray-600 space-y-6 mb-16 leading-relaxed text-center md:text-left max-w-3xl mx-auto reveal-2">
               <p>
                   Welcome to <strong class="text-gray-900 tracking-wider">FILMBOOTH</strong> — the free online photo booth and photobooth website that turns your webcam shots and uploads into printable memories. Everything runs right in your browser, no app, no download, and no sign-up.
               </p>
@@ -311,7 +337,7 @@
               </p>
           </div>
 
-          <div class="grid md:grid-cols-2 gap-16 md:gap-24 text-[13px] text-gray-600 max-w-3xl mx-auto">
+          <div class="grid md:grid-cols-2 gap-16 md:gap-24 text-[13px] text-gray-600 max-w-3xl mx-auto reveal-3">
               <div>
                   <h4 class="font-bold tracking-widest text-[10px] uppercase text-gray-900 mb-6">FREE PHOTO TOOLS</h4>
                   <ul class="space-y-4 font-mono text-xs text-blue-900/80">

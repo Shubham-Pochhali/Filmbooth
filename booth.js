@@ -71,13 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedFilmStock = stock;
         const film = FILMS[stock];
         
-        const loader = document.getElementById('global-loader');
-        if(loader) {
-            const loaderText = loader.querySelector('.loader-text');
-            if(loaderText) loaderText.innerText = 'Calibrating Optics...';
-            loader.classList.remove('hidden');
-            if(typeof playSoftShutter === 'function') playSoftShutter();
-            await sleep(800);
+        const cLeft = document.getElementById('curtain-left');
+        const cRight = document.getElementById('curtain-right');
+        
+        if (cLeft && cRight) {
+            cLeft.classList.add('closed');
+            cRight.classList.add('closed');
+            cLeft.classList.remove('open-sides');
+            cRight.classList.remove('open-sides');
+            await sleep(600); // Give it time to close
         }
         
         // Setup Studio UI
@@ -92,12 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
         viewSetup.classList.add('hidden');
         viewStudio.classList.remove('hidden');
         
+        // Hide Navbar during Studio Mode
+        const navContainer = document.getElementById('global-nav-container');
+        if (navContainer) navContainer.classList.add('hidden');
+        
         initAudioContext();
 
         if (isFirstCapture) {
-            startBtn.classList.remove('animate-pulse-once');
-            void startBtn.offsetWidth;
-            startBtn.classList.add('animate-pulse-once');
+            startBtn.classList.remove('animate-pulse-once'); // fallback cleanup
+            startBtn.classList.add('animate-pulse');
             
             const helper = document.getElementById('onboarding-helper');
             if (helper) {
@@ -107,11 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         await initCamera();
         
-        if(loader) {
-            loader.classList.add('hidden');
-            await sleep(400);
-            const loaderText = loader.querySelector('.loader-text');
-            if(loaderText) loaderText.innerText = 'Winding...';
+        if (cLeft && cRight) {
+            await sleep(200);
+            cLeft.classList.remove('closed');
+            cRight.classList.remove('closed');
+            cLeft.classList.add('open-sides');
+            cRight.classList.add('open-sides');
         }
     }
 
@@ -417,8 +423,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (helper) {
                 helper.style.opacity = '0';
             }
-            startBtn.classList.remove('animate-pulse-once');
         }
+        startBtn.classList.remove('animate-pulse');
 
         startBtn.disabled = true;
         startBtn.innerHTML = `WINDING... <span class="w-4 h-4 rounded-full bg-[#c83232] animate-pulse ml-2"></span>`;
@@ -471,6 +477,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('bg-zinc-950', 'text-white', 'bg-[#232121]');
         document.body.classList.add('bg-[#fafafa]', 'text-gray-900');
         
+        const cLeft = document.getElementById('curtain-left');
+        const cRight = document.getElementById('curtain-right');
+        if (cLeft && cRight) {
+            cLeft.classList.remove('open-sides');
+            cRight.classList.remove('open-sides');
+        }
+
+        const navContainer = document.getElementById('global-nav-container');
+        if (navContainer) navContainer.classList.remove('hidden');
+
         viewStudio.classList.add('hidden');
         viewPrint.classList.remove('hidden');
         
@@ -521,6 +537,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('bg-[#232121]', 'text-white');
         document.body.classList.add('bg-[#fafafa]', 'text-gray-900');
         
+        const navContainer = document.getElementById('global-nav-container');
+        if (navContainer) navContainer.classList.remove('hidden');
+
         finalPrintImage.classList.remove('printing-animation');
         finalPrintImage.src = '';
         finalStripUrl = null;

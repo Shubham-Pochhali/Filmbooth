@@ -83,12 +83,38 @@
         .animate-pulse-once {
             animation: pulse-once 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* Curtains */
+        .curtain {
+            position: fixed;
+            top: 0;
+            width: 50vw;
+            height: 100dvh;
+            background-color: #0f0f0f;
+            z-index: 100;
+            pointer-events: none;
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #curtain-left { left: 0; transform: translateX(-100%); border-right: 1px solid #222; }
+        #curtain-right { right: 0; transform: translateX(100%); border-left: 1px solid #222; }
+
+        .curtain.closed { transform: translateX(0) !important; }
+        
+        #curtain-left.open-sides { transform: translateX(-92%) !important; }
+        #curtain-right.open-sides { transform: translateX(92%) !important; }
+        
+        @media (max-width: 768px) {
+            #curtain-left.open-sides { transform: translateX(-96%) !important; }
+            #curtain-right.open-sides { transform: translateX(96%) !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center bg-[#fafafa] text-gray-900">
   <div class="w-full max-w-6xl px-6 py-10 mx-auto flex flex-col flex-grow">
       
-
+      <!-- Curtains -->
+      <div id="curtain-left" class="curtain"></div>
+      <div id="curtain-right" class="curtain"></div>
 
       <!-- View 0: Setup -->
       <main id="view-setup" class="flex flex-col items-center flex-grow mb-16 w-full max-w-4xl mx-auto mt-10">
@@ -129,10 +155,10 @@
       </main>
 
       <!-- View 1: Studio -->
-      <main id="view-studio" class="hidden flex-col items-center flex-grow mb-16 w-full max-w-2xl mx-auto">
+      <main id="view-studio" class="hidden flex-col justify-center items-center h-[100dvh] w-full max-w-md mx-auto py-6 px-4">
           <!-- Header Layout -->
-          <div class="w-full flex flex-col items-start mb-8">
-              <h1 class="text-[44px] font-bold font-serif mb-2 leading-none">The Studio</h1>
+          <div class="w-full flex flex-col items-start mb-4 shrink-0">
+              <h1 class="text-[32px] md:text-[44px] font-bold font-serif mb-1 leading-none">The Studio</h1>
               <div class="flex items-center gap-4 text-[10px] font-mono tracking-widest uppercase">
                   <span class="text-zinc-400">GET READY FOR 4 SNAPS</span>
                   <div class="h-px w-16 bg-zinc-800"></div>
@@ -141,7 +167,7 @@
           </div>
 
           <!-- Top Status Bar -->
-          <div class="w-full flex items-center gap-4 bg-[#1a1a1a] border border-zinc-800 px-4 py-3 text-[10px] font-mono tracking-widest uppercase text-zinc-400 mb-4 rounded-sm shadow-inner">
+          <div class="w-full flex items-center gap-4 bg-[#1a1a1a] border border-zinc-800 px-4 py-2 text-[10px] font-mono tracking-widest uppercase text-zinc-400 mb-4 rounded-sm shadow-inner shrink-0">
               <div class="flex items-center gap-2">
                   <span id="live-indicator" class="w-2 h-2 rounded-full bg-[#c83232]"></span>
                   <span id="status-text">OPTICAL VIEWFINDER</span>
@@ -151,7 +177,7 @@
           </div>
 
           <!-- Camera Viewport -->
-          <div class="relative bg-[#111] w-full max-w-[460px] mx-auto aspect-[5/6] rounded-sm overflow-hidden border-[8px] border-[#1a1a1a] mb-6 shadow-2xl ring-1 ring-zinc-800">
+          <div class="relative bg-[#111] w-full max-w-[420px] mx-auto aspect-[5/6] max-h-[50vh] rounded-sm overflow-hidden border-[6px] md:border-[8px] border-[#1a1a1a] mb-4 shadow-2xl ring-1 ring-zinc-800 shrink-0">
               
               <div id="permission-overlay" class="absolute inset-0 z-40 bg-black/90 text-white flex flex-col items-center justify-center p-6 text-center">
                   <svg class="w-12 h-12 mb-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
@@ -198,18 +224,18 @@
           </div>
 
           <!-- Controls -->
-          <div class="w-full relative">
-              <button id="start-btn" class="w-full bg-[#1a1a1a] border border-[#333] text-white py-5 font-bold text-[12px] tracking-[0.2em] uppercase hover:bg-[#222] transition-colors rounded-sm shadow-[inset_0_-2px_0_rgba(0,0,0,0.5)] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed btn-mech">
+          <div class="w-full relative shrink-0">
+              <button id="start-btn" class="w-full bg-[#1a1a1a] border border-[#333] text-white py-4 md:py-5 font-bold text-[12px] tracking-[0.2em] uppercase hover:bg-[#222] transition-colors rounded-sm shadow-[inset_0_-2px_0_rgba(0,0,0,0.5)] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed btn-mech">
                   WIND & SHOOT
                   <span class="w-4 h-4 rounded-full bg-[#c83232] shadow-inner ml-2"></span>
               </button>
-              <div id="onboarding-helper" class="absolute -bottom-7 w-full text-center text-[9px] font-mono tracking-widest text-zinc-500 uppercase transition-opacity duration-1000 opacity-0 pointer-events-none">
+              <div id="onboarding-helper" class="absolute -bottom-6 w-full text-center text-[9px] font-mono tracking-widest text-zinc-500 uppercase transition-opacity duration-1000 opacity-0 pointer-events-none">
                   Press SHOOT to capture your first frame.
               </div>
           </div>
 
           <!-- Bottom Status Layout -->
-          <div class="w-full flex justify-end gap-8 mt-10 text-right">
+          <div class="w-full flex justify-end gap-8 mt-6 text-right shrink-0">
               <div class="flex flex-col">
                   <span class="text-[9px] font-mono text-zinc-500 tracking-widest mb-1">TINT</span>
                   <span class="text-xs font-mono tracking-widest" id="tint-status">NEUTRAL</span>
